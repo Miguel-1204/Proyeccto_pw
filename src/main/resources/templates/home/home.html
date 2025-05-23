@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <header>
+        <h1>¡Aprende Jugando!</h1>
+        <a th:href="@{/logout}">Cerrar Sesión</a>
+    </header>
+    <main>
+        <div class="dropdown">
+            <button class="dropbtn">Juegos</button>
+            <div class="dropdown-content">
+                <a th:href="@{/juegos/ingles}">Completar Palabras (Inglés)</a>
+                <a th:href="@{/juegos/matematicas}">Sumar con Figuras</a>
+            </div>
+        </div>
+        <a th:href="@{/info}" class="btn">Información</a>
+    </main>
+</body>
+</html>
