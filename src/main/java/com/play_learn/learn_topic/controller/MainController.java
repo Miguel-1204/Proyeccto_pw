@@ -19,4 +19,5 @@ public class MainController {
 	public String info(Model model) {
 	    return "info/info";
 	}
+	
 }
