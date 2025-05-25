@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Juego de Memoria</title>
+    <style>
+        body { text-align: center; font-family: Arial, sans-serif; }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, 150px);
+            grid-gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .ficha {
+            width: 150px;
+            height: 150px;
+            background-color: black;
+            cursor: pointer;
+            position: relative;
+        }
+        .ficha img {
+            width: 100%;
+            height: 100%;
+            display: none;
+        }
+        .ficha.volteada img {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <h1>Encuentra los pares</h1>
+    <p id="cronometro">Tiempo: 0 s</p>
+    <div class="grid">
+        <!-- Iteramos sobre la lista de imágenes inyectada. Se crean seis fichas. -->
+        <div class="ficha" th:each="img, iterStat : ${imagenes}" 
+             data-img="[[${img}]]" 
+             onclick="voltearFicha(this)">
+            <img th:src="@{${img}}">
+        </div>
+    </div>
+
+    <!-- Mostrar mensaje cuando se complete el juego -->
+    <p id="mensaje"></p>
+
+    <script>
+        var fichasVolteadas = [];
+        var parejasEncontradas = 0;
+        var totalPares = 3; // En este ejemplo hay 3 pares
+        var inicio = Date.now();
+        var timer = setInterval(function() {
+            var transcurrido = Math.floor((Date.now() - inicio) / 1000);
+            document.getElementById('cronometro').innerText = 'Tiempo: ' + transcurrido + ' s';
+        }, 1000);
+
+        function voltearFicha(element) {
+            // Si la ficha ya está volteada o se descubrió la pareja, no hacemos nada
+            if (element.classList.contains('volteada')) return;
+            
+            // Voltea la ficha: quita el fondo negro y muestra la imagen
+            element.classList.add('volteada');
+            fichasVolteadas.push(element);
+            
+            if (fichasVolteadas.length === 2) {
+                // Verificar si las dos fichas tienen la misma imagen
+                var img1 = fichasVolteadas[0].getAttribute('data-img');
+                var img2 = fichasVolteadas[1].getAttribute('data-img');
+        
+                if (img1 === img2) {
+                    // Se encontró un par
+                    parejasEncontradas++;
+                    fichasVolteadas = [];
+                    // Si se han encontrado todos los pares, termina el juego
+                    if (parejasEncontradas === totalPares) {
+                        clearInterval(timer);
+                        var tiempoFinal = Math.floor((Date.now() - inicio) / 1000);
+                        document.getElementById('mensaje').innerText = "¡Completaste el juego en " + tiempoFinal + " segundos!";
+                        // Enviar el tiempo al servidor mediante fetch
+                        guardarPuntuacionMemoria(tiempoFinal);
+                    }
+                } else {
+                    // No coinciden, ocultarlas nuevamente después de 1 segundo
+                    setTimeout(function() {
+                        fichasVolteadas[0].classList.remove('volteada');
+                        fichasVolteadas[1].classList.remove('volteada');
+                        fichasVolteadas = [];
+                    }, 1000);
+                }
+            }
+        }
+
+        function guardarPuntuacionMemoria(tiempoFinal) {
+            fetch('/juegos/matematicas/guardar-puntuacion-memoria', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ tiempo: tiempoFinal })
+            })
+            .then(function(response) {
+                if (!response.ok) {
+                    throw new Error('Error guardando la puntuación');
+                }
+                console.log('Puntuación guardada exitosamente.');
+            })
+            .catch(function(error) {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+    
+    <br>
+    <a href="/juegos/home-matematicas">Volver al inicio</a>
+</body>
+</html>

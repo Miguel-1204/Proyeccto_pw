@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Resultados - Clasificación de Números</title>
+    <style>
+        body { text-align: center; font-family: Arial, sans-serif; }
+        .mensaje { font-size: 22px; font-weight: bold; color: #4CAF50; }
+        .tabla-resultados { margin: auto; border-collapse: collapse; width: 50%; }
+        .tabla-resultados th, .tabla-resultados td { border: 1px solid #ddd; padding: 10px; }
+        .tabla-resultados th { background-color: #f4f4f4; }
+        
+        .tabla-resultados {
+		    margin: auto;
+		    border-collapse: collapse;
+		    width: 60%;
+		    font-size: 18px;
+		    text-align: center;
+		}
+		        
+    </style>
+</head>
+<body>
+    <h1>Resultados Finales</h1>
+    
+    <p class="mensaje" th:text="${mensajeFinal}"></p>
+
+    <table class="tabla-resultados">
+        <thead>
+            <tr>
+                <th>Ronda</th>
+                <th>Puntuación</th>
+            </tr>
+        </thead>
+		<tbody>
+		    <tr th:each="resultado : ${resultados}">
+		        <td th:text="${resultado.usuario}"></td>
+		        <td th:text="${resultado.ronda}"></td>
+		        <td th:text="${resultado.puntuacion} + '%'" 
+		            th:style="${resultado.puntuacion >= 80} ? 'color:green;' : (${resultado.puntuacion >= 50} ? 'color:orange;' : 'color:red;')">
+		        </td>
+		    </tr>
+		</tbody>
+		<form action="/juegos/puntuaciones/eliminar" method="post">
+		  <button type="submit">Borrar Resultados</button>
+		</form>
+    </table>
+
+    <br>
+    <a href="/juegos/home-matematicas">Volver al inicio</a> | 
+    <a href="/juegos/matematicas/clasificacion?ronda=1">Jugar nuevamente</a>
+</body>
+</html>

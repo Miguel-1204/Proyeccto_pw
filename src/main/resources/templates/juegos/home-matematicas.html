@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Juegos de Matemáticas</title>
+    
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        .container { margin-top: 50px; }
+        select, button { font-size: 18px; padding: 10px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Juegos de Matemáticas</h1>
+        <p>Selecciona el tipo de juego:</p>
+
+        <form id="juegoForm">
+            <select id="tipoJuego">
+                <option value="geometria">Geometría</option>
+                <option value="clasificacion">Clasificación de números</option>
+            </select>
+            <br><br>
+            <button type="button" onclick="redirigir()">Jugar</button>
+        </form>
+        
+        <br>
+        <a th:href="@{/home}">Volver al inicio</a>
+        <a href="/juegos/puntuaciones/clasificacion" class="boton">Ver resultados de clasificación</a>
+        
+    </div>
+
+    <script>
+        function redirigir() {
+            var juegoSeleccionado = document.getElementById("tipoJuego").value;
+            window.location.href = "/juegos/matematicas/" + juegoSeleccionado;
+        }
+    </script>
+</body>
+</html>
