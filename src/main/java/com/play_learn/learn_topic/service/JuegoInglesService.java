@@ -173,9 +173,9 @@ public class JuegoInglesService {
     }
 
     public List<Puntuacion> obtenerHistorial(String username) {
-        Usuario usuario = usuarioRepository.findByUsername(username)
-            .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
-        return puntuacionRepository.findByUsuarioOrderByFechaDesc(usuario);
+        return usuarioRepository.findByUsername(username)
+            .map(usuario -> puntuacionRepository.findByUsuarioOrderByFechaDesc(usuario))
+            .orElse(List.of()); // Devuelve lista vacía en lugar de lanzar excepción
     }
     
 

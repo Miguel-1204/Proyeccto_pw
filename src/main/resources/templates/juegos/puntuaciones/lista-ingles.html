@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Puntuaciones de Usuario</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <h2>Puntuaciones de <span th:text="${username}"></span></h2>
+    
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Nivel</th>
+                <th>Puntos</th>
+                <th>Fecha</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="puntuacion : ${puntuaciones}">
+                <td th:text="${puntuacion.nivel}"></td>
+                <td th:text="${puntuacion.puntos}"></td>
+                <td th:text="${#temporals.format(puntuacion.fecha, 'dd/MM/yyyy HH:mm')}"></td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <a href="/home">Volver al inicio</a>
+</body>
+</html>

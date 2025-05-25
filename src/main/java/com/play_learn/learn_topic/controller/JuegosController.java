@@ -1,6 +1,7 @@
 package com.play_learn.learn_topic.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,23 +26,27 @@ public class JuegosController {
     public String mostrarJuegoIngles(
         @RequestParam(required = false, defaultValue = "PRINCIPIANTE") Dificultad nivel,
         Model model) {
-        
+
+        // Obtener el usuario autenticado
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        model.addAttribute("username", username); // Agregar el username al modelo
+
         PreguntaIngles pregunta = juegoInglesService.getPreguntaPorNivel(nivel);
-        
+
         if (pregunta == null) {
             model.addAttribute("puntuacion", juegoInglesService.getPuntuacion());
             model.addAttribute("nivel", nivel);
             juegoInglesService.reiniciarNivel(nivel);
             return "juegos/fin-nivel-ingles";
         }
-        
+
         // Añade estas líneas aquí ▼
         model.addAttribute("preguntasMostradas", juegoInglesService.getPreguntasMostradasCount(nivel));
         model.addAttribute("totalPreguntasNivel", juegoInglesService.getTotalPreguntasNivel(nivel));
-        // ▲
-        
         model.addAttribute("pregunta", pregunta);
         model.addAttribute("niveles", Dificultad.values());
+
+        System.out.println("Usuario autenticado: " + username);
         return "juegos/ingles";
     }
 

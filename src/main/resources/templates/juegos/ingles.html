@@ -8,7 +8,8 @@
     </style>
 </head>
 <body>
-    <div class="nivel-selector">
+<h3>Bienvenido, <span th:text="${username}"></span></h3>
+    <div class="nivel-selector">    
         <form th:action="@{/juegos/ingles}" method="get">
             <label for="nivel">Selecciona nivel:</label>
             <select id="nivel" name="nivel">
