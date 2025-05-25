@@ -1,11 +1,24 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+    <title>Juego de Inglés</title>
 </head>
 <body>
-<h2>Juego de ingles</h2>
-<a th:href="@{/home}">Volver al Home</a>
+    <h1>Completa la oración:</h1>
+    
+    <p th:text="${pregunta.oracion}"></p>
+    
+    <form th:action="@{/juegos/ingles/verificar}" method="post">
+        <input type="hidden" name="oracion" th:value="${pregunta.oracion}">
+        
+        <div th:each="opcion : ${pregunta.opciones}">
+            <button type="submit" name="respuesta" th:value="${opcion}" 
+                    th:text="${opcion}"></button>
+        </div>
+    </form>
+    
+    <p th:if="${resultado}" th:text="${resultado}"></p>
+    
+    <a th:href="@{/home}">Volver al Home</a>
 </body>
 </html>
