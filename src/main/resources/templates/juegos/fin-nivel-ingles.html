@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Nivel Completado</title>
+    <style>
+        .puntuacion {
+            font-size: 2em;
+            color: #4CAF50;
+            margin: 20px 0;
+        }
+        .botones {
+            margin-top: 20px;
+        }
+        a {
+            display: inline-block;
+            margin: 0 10px;
+            padding: 8px 15px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <h1>¡Nivel Completado!</h1>
+    
+    <div class="puntuacion">
+        Puntuación final: <span th:text="${puntuacion}"></span>
+    </div>
+    
+    <div class="botones">
+        <a th:href="@{/juegos/ingles(nivel=${nivel})}">Repetir nivel</a>
+        <a th:href="@{/home}">Volver al inicio</a>
+    </div>
+</body>
+</html>
