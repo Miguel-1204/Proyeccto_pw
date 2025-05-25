@@ -55,6 +55,10 @@ public class JuegosController {
         boolean esCorrecta = juegoInglesService.verificarRespuesta(oracion, respuesta);
         juegoInglesService.registrarRespuesta(esCorrecta);
         
+        // Guarda la puntuación en la BD (¡asegúrate de estar autenticado!)
+        String username = "admin"; // Aquí deberías obtener el username desde Spring Security
+        juegoInglesService.guardarPuntuacion(username, nivel, esCorrecta ? 10 : 0);
+        
         redirectAttrs.addFlashAttribute("resultado", esCorrecta ? "¡Correcto!" : "Incorrecto");
         redirectAttrs.addAttribute("nivel", nivel);
         return "redirect:/juegos/ingles";

@@ -5,7 +5,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -36,6 +38,10 @@ public class Usuario {
         inverseJoinColumns = @JoinColumn(name = "rol_id")
     )
     private Set<Rol> roles = new HashSet<>();
+    
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
+    private List<Puntuacion> puntuaciones = new ArrayList<>();
+    
 
     // Añadir/eliminar roles
     public void addRol(Rol rol) {

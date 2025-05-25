@@ -2,6 +2,10 @@ package com.play_learn.learn_topic.service;
 
 import com.play_learn.learn_topic.entity.Dificultad;
 import com.play_learn.learn_topic.entity.PreguntaIngles;
+import com.play_learn.learn_topic.entity.Puntuacion;
+import com.play_learn.learn_topic.entity.Usuario;
+import com.play_learn.learn_topic.repository.PuntuacionRepository;
+import com.play_learn.learn_topic.repository.UsuarioRepository;
 
 import jakarta.annotation.PostConstruct;
 
@@ -89,6 +93,7 @@ public class JuegoInglesService {
     private Map<Dificultad, Set<Integer>> preguntasMostradas; // Guarda índices de preguntas mostradas
     private int correctas = 0;
     private int totalIntentos = 0;
+    
 
     @PostConstruct
     public void init() {
@@ -145,6 +150,34 @@ public class JuegoInglesService {
     public int getTotalPreguntasNivel(Dificultad nivel) {
         return preguntasPorNivel.get(nivel).size();
     }
+    
+    private final PuntuacionRepository puntuacionRepository;   //importantes para la puntuaciòn el la bd
+    private final UsuarioRepository usuarioRepository;
+
+    public JuegoInglesService(PuntuacionRepository puntuacionRepository, UsuarioRepository usuarioRepository) {
+        this.puntuacionRepository = puntuacionRepository;
+        this.usuarioRepository = usuarioRepository;
+    }
+    
+    public void guardarPuntuacion(String username, Dificultad nivel, int puntos) {
+        Usuario usuario = usuarioRepository.findByUsername(username)
+            .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        Puntuacion puntuacion = new Puntuacion();
+        puntuacion.setUsuario(usuario);
+        puntuacion.setNivel(nivel);
+        puntuacion.setPuntos(puntos);
+
+        System.out.println("Guardando puntuación: " + puntuacion.getPuntos()); // Prueba con un log
+        puntuacionRepository.save(puntuacion);
+    }
+
+    public List<Puntuacion> obtenerHistorial(String username) {
+        Usuario usuario = usuarioRepository.findByUsername(username)
+            .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        return puntuacionRepository.findByUsuarioOrderByFechaDesc(usuario);
+    }
+    
 
 
     // Método original (opcional)

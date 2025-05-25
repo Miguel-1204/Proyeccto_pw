@@ -5,17 +5,30 @@
     <title>Login</title>
     <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
-<body>
-    <div class="login-container">
-        <h1>¡Bienvenido!</h1>
-        <form th:action="@{/login}" method="post">
-            <input type="text" name="username" placeholder="Usuario" required>
-            <input type="password" name="password" placeholder="Contraseña" required>
-            <button type="submit">Ingresar</button>
-        </form>
-        <div th:if="${param.error}" class="error">
-            Usuario o contraseña incorrectos
+<body class="login-back">
+    <div class="login">
+      <div class="login-screen">
+        <div class="app-title">
+          <h1>¡Bienvenido!</h1>
         </div>
+        <form th:action="@{/login}" method="post">
+        <div class="login-form">
+          <div class="control-group">
+            <input type="text" class="login-field" name="username" placeholder="Usuario" id="login-name">
+            <label class="login-field-icon fui-user" for="login-name"></label>
+          </div>
+  
+          <div class="control-group">
+            <input type="password" class="login-field" name="password" placeholder="Contraseña" id="login-pass">
+            <label class="login-field-icon fui-lock" for="login-pass"></label>
+          </div>
+  
+          <button class="btn" type="submit">Ingresar</button>    
+        </form>
+        
+          <a class="login-link" href="#">Crear cuenta</a>
+        </div>
+      </div>
     </div>
-</body>
+  </body>
 </html>
