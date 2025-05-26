@@ -27,8 +27,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.play_learn.learn_topic.entity.Dificultad;
 import com.play_learn.learn_topic.entity.PreguntaIngles;
 import com.play_learn.learn_topic.entity.PuntuacionClasificacion;
+import com.play_learn.learn_topic.entity.PuntuacionGeografia;
 import com.play_learn.learn_topic.entity.PuntuacionGeometria;
 import com.play_learn.learn_topic.repository.PuntuacionClasificacionRepository;
+import com.play_learn.learn_topic.repository.PuntuacionGeografiaRepository;
 import com.play_learn.learn_topic.repository.PuntuacionGeometriaRepository;
 import com.play_learn.learn_topic.service.JuegoInglesService;
 
@@ -272,6 +274,88 @@ public class JuegosController {
 	        puntuacionGeometriaRepository.deleteAll();
 	        return "redirect:/juegos/puntuaciones/lista-geometria";
 	    }
+    
+    //Juego de geografia
+    
+    @Autowired
+    private PuntuacionGeografiaRepository puntuacionGeografiaRepository;
+
+    // Endpoint para mostrar el juego de geografía
+    @GetMapping("/geografia")
+    public String juegoGeografia(Model model) {
+        try {
+            // Lista estática de imágenes y respuestas correctas
+            List<String> imagenes = List.of(
+                "/img/geografia/andina.png",
+                "/img/geografia/caribe.png",
+                "/img/geografia/pacifico.png",
+                "/img/geografia/orinoquia.png",
+                "/img/geografia/amazonia.png"
+            );
+            List<String> respuestas = List.of(
+                "Andina",     
+                "Caribe",     
+                "Pacífico",
+                "Orinoquía",
+                "Amazonía"
+            );
+
+            // Selección aleatoria
+            Random random = new Random();
+            int index = random.nextInt(imagenes.size());
+            String imagenDepartamento = imagenes.get(index);
+            String respuestaCorrecta = respuestas.get(index);
+
+            model.addAttribute("imagenDepartamento", imagenDepartamento);
+            model.addAttribute("respuestaCorrecta", respuestaCorrecta);
+            return "juegos/geografia";
+        } catch (Exception e) {
+            e.printStackTrace();
+            model.addAttribute("error", "Error al cargar el juego de geografía");
+            return "error";
+        }
+    }
+
+    // Endpoint para guardar la puntuación del juego de geografía
+    @PostMapping("/guardar-puntuacion-geografia")
+    public ResponseEntity<?> guardarPuntuacionGeografia(@RequestBody Map<String, Object> datos) {
+        try {
+            // Ya no se recibe ni procesa el tiempo, solo el indicador de victoria.
+            boolean victoria = Boolean.parseBoolean(datos.get("victoria").toString());
+            
+            // Obtener el usuario autenticado
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            String username = auth.getName();
+            
+            PuntuacionGeografia puntuacion = new PuntuacionGeografia();
+            puntuacion.setUsername(username);
+            puntuacion.setVictoria(victoria);
+            puntuacion.setFecha(LocalDateTime.now());
+            
+            puntuacionGeografiaRepository.save(puntuacion);
+            
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+    
+    // (Opcional) Endpoint para listar los resultados del juego de geografía por usuario
+    @GetMapping("/puntuaciones/geografia")
+    public String mostrarPuntuaciones(Model model) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        List<PuntuacionGeografia> puntuaciones = puntuacionGeografiaRepository.findByUsernameOrderByFechaDesc(username);
+        model.addAttribute("puntuaciones", puntuaciones);
+        return "juegos/puntuaciones/lista-geografia";
+    }
+
+    // (Opcional) Endpoint para eliminar todas las puntuaciones de geografía
+    @PostMapping("/puntuaciones/eliminar-geografia")
+    public String eliminarPuntuacionesGeografia() {
+        puntuacionGeografiaRepository.deleteAll();
+        return "redirect:/juegos/puntuaciones/geografia";
+    }
 
 
 

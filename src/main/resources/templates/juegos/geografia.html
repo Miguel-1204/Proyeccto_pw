@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Juego de Geografía</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: #f5f5f5;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      background: #fff;
+      max-width: 800px;
+      margin: 0 auto;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      padding: 20px;
+    }
+    h1 {
+      color: #2c3e50;
+      margin-bottom: 20px;
+    }
+    .pregunta {
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+    .imagen-container {
+      margin: 20px auto;
+      border: 2px solid #ccc;
+      padding: 10px;
+      border-radius: 8px;
+      width: 400px;
+      height: auto;
+    }
+    .imagen-container img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 4px;
+    }
+    .opciones {
+      margin-top: 20px;
+    }
+    .opciones button {
+      margin: 10px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background: #3498db;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .opciones button:hover {
+      background: #2980b9;
+    }
+    #mensaje {
+      margin-top: 20px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Juego de Geografía</h1>
+    
+    <!-- Pregunta actualizada -->
+    <p class="pregunta">¿Qué región de Colombia es la que se muestra RESALTADA en la imagen?</p>
+    
+    <!-- Imagen del departamento o región -->
+    <div class="imagen-container">
+      <!-- Inyecta la imagen de forma dinámica usando Thymeleaf, por ejemplo: -->
+      <img id="departamentoImg" th:src="@{${imagenDepartamento}}" alt="Departamento">
+    </div>
+    
+    <!-- Opciones de respuesta -->
+    <div class="opciones">
+      <button onclick="enviarRespuesta('Andina')">Andina</button>
+      <button onclick="enviarRespuesta('Caribe')">Caribe</button>
+      <button onclick="enviarRespuesta('Pacífico')">Pacífico</button>
+      <button onclick="enviarRespuesta('Orinoquía')">Orinoquía</button>
+      <button onclick="enviarRespuesta('Amazonía')">Amazonía</button>
+    </div>
+    
+    <!-- Mensaje de resultado -->
+    <p id="mensaje"></p>
+    
+    <script>
+      console.log("Script de geografía cargado");
+      
+      // Inyección de la respuesta correcta. Se podría inyectar desde el controlador
+      var respuestaCorrecta = "[[${respuestaCorrecta}]]"; // Ejemplo: "Andina"
+      
+      // Función para evaluar la respuesta
+      function enviarRespuesta(opcion) {
+        if (opcion.trim().toLowerCase() === respuestaCorrecta.trim().toLowerCase()) {
+          document.getElementById('mensaje').innerText = "¡Correcto!";
+        } else {
+          document.getElementById('mensaje').innerText = "Incorrecto. La respuesta correcta es: " + respuestaCorrecta;
+        }
+      }
+    </script>
+  </div>
+</body>
+</html>
