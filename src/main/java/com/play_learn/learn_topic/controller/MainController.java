@@ -29,9 +29,9 @@ public class MainController {
 	    return "info/info";
 	}
 	
-    @GetMapping("/administracion")
-    public String mostrarAdministracion() {
-        // Retorna el nombre de la vista que corresponde a la plantilla administracion.html
-        return "administracion";
-    }
+//    @GetMapping("/administracion")
+//    public String mostrarAdministracion() {
+//        // Retorna el nombre de la vista que corresponde a la plantilla administracion.html
+//        return "administracion";
+//    }
 }

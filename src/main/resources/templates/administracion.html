@@ -16,6 +16,9 @@
     <div class="container">
         <h1>Panel de Administración</h1>
         
+        <!-- Botón para regresar al Home -->
+        <a class="btn btn-secondary mb-3" th:href="@{/home}">Home</a>
+        
         <!-- Botón desplegable para seleccionar opción -->
         <div class="dropdown">
             <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownOpciones" data-bs-toggle="dropdown" aria-expanded="false">
@@ -53,8 +56,7 @@
                         <td th:text="${usuario.id}">1</td>
                         <td th:text="${usuario.username}">usuario1</td>
                         <td th:text="${usuario.email}">user@example.com</td>
-                        <!-- Aquí se muestra la lista de roles, puedes ajustar según tu lógica -->
-                        <td th:text="${#strings.arrayJoin(usuario.roles.?[nombre], ', ')}">USUARIO</td>
+                        <td th:text="${#strings.arrayJoin(usuario.roles.![nombre], ', ')}">USUARIO</td>
                     </tr>
                 </tbody>
             </table>
@@ -64,7 +66,7 @@
         <div id="puntuacionUsuario" style="display:none">
             <h2>Puntuación por Usuario</h2>
             <!-- Formulario para buscar puntuación por nombre de usuario -->
-            <form th:action="@{/admin/buscar-puntuacion}" method="get">
+            <form th:action="@{/administracion/buscar-puntuacion}" method="get">
                 <div class="mb-3">
                     <label for="usernameInput" class="form-label">Nombre de Usuario:</label>
                     <input type="text" class="form-control" id="usernameInput" name="username" placeholder="Ingrese el nombre de usuario" required>
@@ -73,85 +75,91 @@
             </form>
             
             <!-- Se asume que al procesar el formulario, el controlador pone en el modelo un objeto "puntuaciones" -->
-            <div th:if="${puntuaciones != null}" class="mt-4">
-                <h3>Puntuaciones de <span th:text="${puntuaciones.username}">usuario</span></h3>
-                
-                <!-- Tabla para Inglés -->
-                <h4>Inglés</h4>
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Puntuación</th>
-                            <th>Fecha</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr th:each="p : ${puntuaciones.ingles}">
-                            <td th:text="${p.id}">1</td>
-                            <td th:text="${p.puntuacion}">90</td>
-                            <td th:text="${p.fecha}">2023-01-01</td>
-                        </tr>
-                    </tbody>
-                </table>
-                
-                <!-- Tabla para Geometría -->
-                <h4>Geometría</h4>
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Puntuación</th>
-                            <th>Fecha</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr th:each="p : ${puntuaciones.geometria}">
-                            <td th:text="${p.id}">1</td>
-                            <td th:text="${p.puntuacion}">85</td>
-                            <td th:text="${p.fecha}">2023-01-01</td>
-                        </tr>
-                    </tbody>
-                </table>
-                
-                <!-- Tabla para Clasificación -->
-                <h4>Clasificación</h4>
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Puntuación</th>
-                            <th>Fecha</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr th:each="p : ${puntuaciones.clasificacion}">
-                            <td th:text="${p.id}">1</td>
-                            <td th:text="${p.puntuacion}">92</td>
-                            <td th:text="${p.fecha}">2023-01-01</td>
-                        </tr>
-                    </tbody>
-                </table>
-                
-                <!-- Tabla para Geografía -->
-                <h4>Geografía</h4>
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Puntuación</th>
-                            <th>Fecha</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr th:each="p : ${puntuaciones.geografia}">
-                            <td th:text="${p.id}">1</td>
-                            <td th:text="${p.puntuacion}">88</td>
-                            <td th:text="${p.fecha}">2023-01-01</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+			<!-- Se mostrará la información si se ha enviado un username -->
+			<div th:if="${username != null}" class="mt-4">
+			    <h3>Puntuaciones de <span th:text="${username}">usuario</span></h3>
+			    
+			    <!-- Tabla para Inglés -->
+			    <h4>Inglés</h4>
+			    <table class="table table-bordered">
+			        <thead>
+			            <tr>
+			                <th>ID</th>
+			                <th>Nivel</th>
+			                <th>Puntos</th>
+			                <th>Fecha</th>
+			            </tr>
+			        </thead>
+			        <tbody>
+			            <tr th:each="p : ${puntuacionesIngles}">
+			                <td th:text="${p.id}">1</td>
+			                <td th:text="${p.nivel}">FÁCIL</td>
+			                <td th:text="${p.puntos}">90</td>
+			                <td th:text="${p.fecha}">2023-01-01</td>
+			            </tr>
+			        </tbody>
+			    </table>
+			    
+			    <!-- Tabla para Clasificación -->
+			    <h4>Clasificación</h4>
+			    <table class="table table-bordered">
+			        <thead>
+			            <tr>
+			                <th>ID</th>
+			                <th>Ronda</th>
+			                <th>Puntuación</th>
+			            </tr>
+			        </thead>
+			        <tbody>
+			            <tr th:each="p : ${puntuacionesClasificacion}">
+			                <td th:text="${p.id}">1</td>
+			                <td th:text="${p.ronda}">3</td>
+			                <td th:text="${p.puntuacion}">92</td>
+			            </tr>
+			        </tbody>
+			    </table>
+			    
+			    <!-- Tabla para Geometría -->
+			    <h4>Geometría</h4>
+			    <table class="table table-bordered">
+			        <thead>
+			            <tr>
+			                <th>ID</th>
+			                <th>Tiempo (seg.)</th>
+			                <th>Victoria</th>
+			                <th>Fecha</th>
+			            </tr>
+			        </thead>
+			        <tbody>
+			            <tr th:each="p : ${puntuacionesGeometria}">
+			                <td th:text="${p.id}">1</td>
+			                <td th:text="${p.tiempo}">45</td>
+			                <td th:text="${p.victoria}">true</td>
+			                <td th:text="${p.fecha}">2023-01-01</td>
+			            </tr>
+			        </tbody>
+			    </table>
+			    
+			    <!-- Tabla para Geografía -->
+			    <h4>Geografía</h4>
+			    <table class="table table-bordered">
+			        <thead>
+			            <tr>
+			                <th>ID</th>
+			                <th>Victoria</th>
+			                <th>Fecha</th>
+			            </tr>
+			        </thead>
+			        <tbody>
+			            <tr th:each="p : ${puntuacionesGeografia}">
+			                <td th:text="${p.id}">1</td>
+			                <td th:text="${p.victoria}">false</td>
+			                <td th:text="${p.fecha}">2023-01-01</td>
+			            </tr>
+			        </tbody>
+			    </table>
+			</div>
+
         </div>
         
     </div>

@@ -9,4 +9,7 @@ import java.util.List;
 public interface PuntuacionRepository extends JpaRepository<Puntuacion, Long> {
     List<Puntuacion> findByUsuarioAndNivel(Usuario usuario, Dificultad nivel);
     List<Puntuacion> findByUsuarioOrderByFechaDesc(Usuario usuario);
+    //administracion
+    List<Puntuacion> findByUsuarioUsername(String username);
+
 }
