@@ -102,7 +102,7 @@
   <div class="opciones">
     <p>¿Qué figura es?</p>
     <button onclick="enviarRespuesta('Triángulo')">Triángulo</button>
-    <button onclick="enviarRespuesta('Cuadrado')">Cuadrado</button>
+    <button onclick="enviarRespuesta('Rectangulo')">Rectangulo</button>
     <button onclick="enviarRespuesta('Pentágono')">Pentágono</button>
     <button onclick="desbloquearCasillaAleatoria()">Desbloquear casilla aleatoria</button>
   </div>
@@ -110,73 +110,88 @@
   <!-- Mensaje de resultado -->
   <p id="mensaje"></p>
 
-  <script>
-    console.log("Script de geometría cargado");
+<script>
+  console.log("Script de geometría cargado");
+  
+  // Inyecta el valor de la respuesta correcta desde el controlador
+  // Asegúrate de que desde el controlador se esté enviando, por ejemplo, "Triángulo"
+  var respuestaCorrecta = "[[${respuestaCorrecta}]]";
+  
+  // Variables para controlar el estado
+  var casillasDesbloqueadas = 0;
+  var totalCasillas = 9; // Ahora son 9 casillas (3x3)
+  var respuestaSeleccionada = false;
+  var tiempoInicio = Date.now();
+
+  // Función para desbloquear una casilla
+  function desbloquearCasilla(element) {
+    if (respuestaSeleccionada) return;
     
-    // Variables para controlar el estado
-    var casillasDesbloqueadas = 0;
-    var totalCasillas = 9; // Ahora son 9 casillas (3x3)
-    var respuestaSeleccionada = false;
-    var tiempoInicio = Date.now();
-
-    // Función para desbloquear una casilla
-    function desbloquearCasilla(element) {
-      if (respuestaSeleccionada) return;
-      
-      const cover = element.querySelector('.cover');
-      if (!cover) return;
-      
-      cover.style.opacity = '0';
-      setTimeout(() => element.removeChild(cover), 300);
-      casillasDesbloqueadas++;
-      
-      if (casillasDesbloqueadas === totalCasillas) {
-        document.getElementById('mensaje').innerText = "¡Imagen completa desbloqueada!";
-      }
-    }
-
-    // Función para enviar la respuesta seleccionada
-    function enviarRespuesta(opcion) {
-      if (respuestaSeleccionada) return;
-      respuestaSeleccionada = true;
-      var tiempoRespuesta = Math.floor((Date.now() - tiempoInicio) / 1000);
-
-      var victoria = casillasDesbloqueadas < totalCasillas;
-      var mensaje = victoria 
-        ? `¡Correcto! Ganaste con bonificación (${9 - casillasDesbloqueadas} casillas ocultas). Tiempo: ${tiempoRespuesta} segundos`
-        : `¡Correcto! Pero revelaste toda la imagen. Tiempo: ${tiempoRespuesta} segundos`;
-      
-      document.getElementById('mensaje').innerText = mensaje;
-      guardarPuntuacionGeometria(tiempoRespuesta, victoria);
-    }
-
-    // Función para guardar la puntuación
-    function guardarPuntuacionGeometria(tiempo, victoria) {
-      fetch('/juegos/matematicas/guardar-puntuacion-geometria', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ tiempo: tiempo, victoria: victoria })
-      })
-      .then(response => {
-        if (!response.ok) throw new Error('Error guardando la puntuación');
-        console.log('Puntuación guardada exitosamente.');
-      })
-      .catch(error => console.error('Error:', error));
-    }
+    const cover = element.querySelector('.cover');
+    if (!cover) return;
     
-    // Función para desbloquear casilla aleatoria
-    function desbloquearCasillaAleatoria() {
-      const casillas = document.querySelectorAll('.casilla');
-      const casillasBloqueadas = Array.from(casillas).filter(c => 
-        c.querySelector('.cover') !== null
-      );
-      
-      if (casillasBloqueadas.length > 0) {
-        const randomIndex = Math.floor(Math.random() * casillasBloqueadas.length);
-        desbloquearCasilla(casillasBloqueadas[randomIndex]);
-      }
+    cover.style.opacity = '0';
+    setTimeout(() => element.removeChild(cover), 300);
+    casillasDesbloqueadas++;
+    
+    if (casillasDesbloqueadas === totalCasillas) {
+      document.getElementById('mensaje').innerText = "¡Imagen completa desbloqueada!";
     }
-  </script>
+  }
+
+  // Función para enviar la respuesta seleccionada
+  function enviarRespuesta(opcion) {
+    if (respuestaSeleccionada) return;
+    respuestaSeleccionada = true;
+    var tiempoRespuesta = Math.floor((Date.now() - tiempoInicio) / 1000);
+
+    // Compara la respuesta seleccionada con la respuesta correcta (ignora mayúsculas y espacios)
+    var esCorrecto = opcion.trim().toLowerCase() === respuestaCorrecta.trim().toLowerCase();
+    var mensaje = "";
+    if (esCorrecto) {
+      if (casillasDesbloqueadas < totalCasillas) {
+        mensaje = `¡Correcto! Ganaste con bonificación (${totalCasillas - casillasDesbloqueadas} casillas ocultas). Tiempo: ${tiempoRespuesta} segundos`;
+      } else {
+        mensaje = `¡Correcto! Pero revelaste toda la imagen. Tiempo: ${tiempoRespuesta} segundos`;
+      }
+    } else {
+      mensaje = `¡Incorrecto! La respuesta correcta es: ${respuestaCorrecta}. Tiempo: ${tiempoRespuesta} segundos`;
+    }
+    document.getElementById('mensaje').innerText = mensaje;
+    
+    // Guarda la puntuación usando cierta lógica: por ejemplo, solo se otorga bonificación
+    // si la respuesta es correcta y aún quedan casillas ocultas.
+    guardarPuntuacionGeometria(tiempoRespuesta, esCorrecto && (casillasDesbloqueadas < totalCasillas));
+  }
+
+  // Función para guardar la puntuación
+  function guardarPuntuacionGeometria(tiempo, victoria) {
+    fetch('/juegos/matematicas/guardar-puntuacion-geometria', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ tiempo: tiempo, victoria: victoria })
+    })
+    .then(response => {
+      if (!response.ok) throw new Error('Error guardando la puntuación');
+      console.log('Puntuación guardada exitosamente.');
+    })
+    .catch(error => console.error('Error:', error));
+  }
+  
+  // Función para desbloquear una casilla aleatoria
+  function desbloquearCasillaAleatoria() {
+    const casillas = document.querySelectorAll('.casilla');
+    const casillasBloqueadas = Array.from(casillas).filter(c => 
+      c.querySelector('.cover') !== null
+    );
+    
+    if (casillasBloqueadas.length > 0) {
+      const randomIndex = Math.floor(Math.random() * casillasBloqueadas.length);
+      desbloquearCasilla(casillasBloqueadas[randomIndex]);
+    }
+  }
+</script>
+
   
   <br>
   <a href="/juegos/home-matematicas">Volver al inicio</a>

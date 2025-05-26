@@ -2,9 +2,11 @@ package com.play_learn.learn_topic.controller;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -187,14 +189,29 @@ public class JuegosController {
     @GetMapping("/matematicas/geometria")
     public String juegoGeometria(Model model) {
         try {
-            // Configuración básica
-            String figuraCompleta = "/img/figuras/rectangulo.jpg";
+            // Lista de imágenes disponibles
+            List<String> imagenes = Arrays.asList(
+                "/img/figuras/rectangulo.jpg",
+                "/img/figuras/Triángulo.jpg",
+                "/img/figuras/pentagono.jpg"
+            );
+            Random random = new Random();
+            String figuraCompleta = imagenes.get(random.nextInt(imagenes.size()));
             
-            // Precalcular posiciones para cada pieza (3x3 grid)
+            // Determina la respuesta correcta según la imagen seleccionada
+            String respuestaCorrecta = "";
+            if (figuraCompleta.contains("rectangulo"))
+                respuestaCorrecta = "Rectángulo"; // O "Cuadrado" si así lo deseas
+            else if (figuraCompleta.contains("Triangulo"))
+                respuestaCorrecta = "Triángulo";
+            else if (figuraCompleta.contains("pentagono"))
+                respuestaCorrecta = "Pentágono";
+            
+            // Precalcular posiciones para la grilla (3x3)
             List<Map<String, Integer>> posiciones = new ArrayList<>();
             for (int i = 1; i <= 9; i++) {
-                int xPos = ((i-1)%3) * 150;
-                int yPos = ((int) Math.floor((i-1)/3)) * 150;
+                int xPos = ((i - 1) % 3) * 150;
+                int yPos = ((int) Math.floor((i - 1) / 3)) * 150;
                 posiciones.add(Map.of(
                     "xPos", xPos,
                     "yPos", yPos,
@@ -204,9 +221,10 @@ public class JuegosController {
             
             // Agregar atributos al modelo
             model.addAttribute("figuraCompleta", figuraCompleta);
+            model.addAttribute("respuestaCorrecta", respuestaCorrecta);
             model.addAttribute("posiciones", posiciones);
             model.addAttribute("totalCasillas", 9); // 3x3 grid
-            
+
             return "juegos/matematicas/geometria";
         } catch (Exception e) {
             e.printStackTrace();
@@ -214,6 +232,8 @@ public class JuegosController {
             return "error";
         }
     }
+
+
 
     @PostMapping("/matematicas/guardar-puntuacion-geometria")
     public ResponseEntity<?> guardarPuntuacionGeometria(@RequestBody Map<String, Object> datos) {
