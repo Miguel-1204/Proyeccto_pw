@@ -3,6 +3,7 @@ package com.play_learn.learn_topic.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -28,6 +29,17 @@ public class MainController {
 	public String info(Model model) {
 	    return "info/info";
 	}
+	
+    @GetMapping
+    public String accionAdministrador(Authentication authentication) {
+        // Verificación de seguridad adicional
+        if (authentication != null && 
+            authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMINISTRADOR"))) {
+            return "administracion/accion-admin";
+        }
+        throw new AccessDeniedException("Acceso denegado");
+    }
 	
 //    @GetMapping("/administracion")
 //    public String mostrarAdministracion() {

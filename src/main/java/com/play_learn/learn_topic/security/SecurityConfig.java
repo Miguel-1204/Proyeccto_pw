@@ -20,6 +20,9 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 // Permitir recursos públicos y páginas de login/registro
                 .requestMatchers("/css/**", "/js/**", "/login", "/registro").permitAll()
+                
+                .requestMatchers("/administracion/accion-admin").hasAuthority("ROLE_ADMINISTRADOR")
+                
                 // La plantilla de administración solo será accesible para educadores o admin
                 .requestMatchers("/administracion").hasAnyRole("ADMINISTRADOR", "EDUCADOR")
                 // Los juegos, así como las páginas home e info son accesibles para usuario, educador y admin

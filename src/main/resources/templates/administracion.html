@@ -16,8 +16,17 @@
     <div class="container">
         <h1>Panel de Administración</h1>
         
-        <!-- Botón para regresar al Home -->
-        <a class="btn btn-secondary mb-3" th:href="@{/home}">Home</a>
+		<div class="d-flex justify-content-between mb-3">
+		  <!-- Botón Home visible para todos -->
+		  <a class="btn btn-secondary" th:href="@{/home}">Home</a>
+
+		<!-- Botón de Acción Administrador -->
+		<div th:if="${mostrarAccionAdmin}">
+		    <a th:href="@{/administracion/accion-admin}" class="btn btn-danger">
+		        Acción Administrador
+		    </a>
+		</div>
+		</div>
         
         <!-- Botón desplegable para seleccionar opción -->
         <div class="dropdown">
@@ -63,7 +72,7 @@
         </div>
         
         <!-- Sección para Puntuación por Usuario -->
-        <div id="puntuacionUsuario" style="display:none">
+        <div id="puntuacionUsuario" th:style="${username != null} ? 'display:block' : 'display:none'">
             <h2>Puntuación por Usuario</h2>
             <!-- Formulario para buscar puntuación por nombre de usuario -->
             <form th:action="@{/administracion/buscar-puntuacion}" method="get">
