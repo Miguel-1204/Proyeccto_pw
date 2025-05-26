@@ -1,5 +1,6 @@
 package com.play_learn.learn_topic.controller;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -9,6 +10,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -96,10 +98,6 @@ public class JuegosController {
         return "juegos/matematicas/operaciones";
     }
 
-//    @GetMapping("/matematicas/geometria")
-//    public String juegoGeometria() {
-//        return "juegos/matematicas/geometria";
-//    }
     @GetMapping("/matematicas/clasificacion")
     public String juegoClasificacion(Model model) {
         List<Integer> numeros = List.of(27, 98, 1023);
@@ -185,43 +183,76 @@ public class JuegosController {
     
     @Autowired
     private PuntuacionGeometriaRepository puntuacionGeometriaRepository;
-
-    // Endpoint para mostrar el juego de memoria
+    
     @GetMapping("/matematicas/geometria")
-    public String juegoMemoria(Model model) {
-        // Definimos 3 imágenes que aparecerán cada una dos veces
-        List<String> imagenes = new ArrayList<>();
-        imagenes.add("/img/figuras/Triangulo-equilatero.jpg");
-        imagenes.add("/img/figuras/Triangulo-equilatero.jpg");
-        imagenes.add("/img/figuras/pentagono.jpg");
-        imagenes.add("/img/figuras/pentagono.jpg");
-        imagenes.add("/img/figuras/rectangulo.jpg");
-        imagenes.add("/img/figuras/rectangulo.jpg");
-        
-        // Barajar la lista para que la distribución sea aleatoria
-        Collections.shuffle(imagenes);
-        model.addAttribute("imagenes", imagenes);
-        
-        // Devuelve la vista, por ejemplo "juegos/matematicas/memoria"
-        return "juegos/matematicas/geometria";
+    public String juegoGeometria(Model model) {
+        try {
+            // Configuración básica
+            String figuraCompleta = "/img/figuras/rectangulo.jpg";
+            
+            // Precalcular posiciones para cada pieza (3x3 grid)
+            List<Map<String, Integer>> posiciones = new ArrayList<>();
+            for (int i = 1; i <= 9; i++) {
+                int xPos = ((i-1)%3) * 150;
+                int yPos = ((int) Math.floor((i-1)/3)) * 150;
+                posiciones.add(Map.of(
+                    "xPos", xPos,
+                    "yPos", yPos,
+                    "index", i
+                ));
+            }
+            
+            // Agregar atributos al modelo
+            model.addAttribute("figuraCompleta", figuraCompleta);
+            model.addAttribute("posiciones", posiciones);
+            model.addAttribute("totalCasillas", 9); // 3x3 grid
+            
+            return "juegos/matematicas/geometria";
+        } catch (Exception e) {
+            e.printStackTrace();
+            model.addAttribute("error", "Error al cargar el juego de geometría");
+            return "error";
+        }
     }
 
-    // Endpoint para guardar la puntuación del juego de memoria
-    @PostMapping("/matematicas/guardar-puntuacion-memoria")
-    public ResponseEntity<?> guardarPuntuacionMemoria(@org.springframework.web.bind.annotation.RequestBody Map<String, Integer> datos) {
-        int tiempo = datos.get("tiempo");
-        // Obtener el usuario autenticado
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String username = auth.getName();
-    
-        PuntuacionGeometria puntuacion = new PuntuacionGeometria();
-        puntuacion.setUsername(username);
-        puntuacion.setTiempo(tiempo);
-    
-        puntuacionGeometriaRepository.save(puntuacion);
-    
-        return ResponseEntity.ok().build();
+    @PostMapping("/matematicas/guardar-puntuacion-geometria")
+    public ResponseEntity<?> guardarPuntuacionGeometria(@RequestBody Map<String, Object> datos) {
+        try {
+            int tiempo = Integer.parseInt(datos.get("tiempo").toString());
+            boolean victoria = Boolean.parseBoolean(datos.get("victoria").toString());
+            
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            String username = auth.getName();
+            
+            PuntuacionGeometria puntuacion = new PuntuacionGeometria();
+            puntuacion.setUsername(username);
+            puntuacion.setTiempo(tiempo);
+            puntuacion.setVictoria(victoria);
+            puntuacion.setFecha(LocalDateTime.now());
+            
+            puntuacionGeometriaRepository.save(puntuacion);
+            
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
+    
+    @GetMapping("/puntuaciones/lista-geometria")
+    public String mostrarPuntuacionesUsuario(Model model) {
+	        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+	        List<PuntuacionGeometria> puntuaciones = puntuacionGeometriaRepository.findByUsernameOrderByFechaDesc(username);
+	        model.addAttribute("puntuaciones", puntuaciones);
+	        return "juegos/puntuaciones/lista-geometria";
+	    }
+
+    @PostMapping("/puntuaciones/eliminar-geometria")
+	    public String eliminarPuntuacionesGeometria() {
+	        puntuacionGeometriaRepository.deleteAll();
+	        return "redirect:/juegos/puntuaciones/lista-geometria";
+	    }
+
 
 
 }
