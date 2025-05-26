@@ -18,7 +18,12 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/css/**", "/js/**", "/login").permitAll()
+                // Permitir recursos públicos y páginas de login/registro
+                .requestMatchers("/css/**", "/js/**", "/login", "/registro").permitAll()
+                // La plantilla de administración solo será accesible para educadores o admin
+                .requestMatchers("/administracion").hasAnyRole("ADMINISTRADOR", "EDUCADOR")
+                // Los juegos, así como las páginas home e info son accesibles para usuario, educador y admin
+                .requestMatchers("/juegos/**", "/home", "/info").hasAnyRole("USUARIO", "EDUCADOR", "ADMINISTRADOR")
                 .anyRequest().authenticated()
             )
             .formLogin(form -> form
@@ -30,6 +35,7 @@ public class SecurityConfig {
                 .logoutSuccessUrl("/login?logout")
                 .permitAll()
             )
+            // Deshabilitando CSRF para simplificar (aunque en producción es recomendable configurarlo correctamente)
             .csrf(csrf -> csrf.disable());
 
         return http.build();

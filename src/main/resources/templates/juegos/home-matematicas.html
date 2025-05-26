@@ -4,20 +4,35 @@
     <meta charset="UTF-8">
     <title>Juegos Matemáticos</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            background-color: #f5f5f5;
-            padding: 20px;
-        }
+		body {
+		  font-family: var(--tipo-principal);
+		  font-size: 100%;
+		  line-height: 1.4em;
+		  min-height: 100vh;
+		  background-color: #2b3e52;
+		  color: var(--negro);
+		  -webkit-hyphens: auto;
+		          hyphens: auto;
+		  font-smooth: always;
+		  -webkit-font-smoothing: antialiased;
+		  -moz-osx-font-smoothing: grayscale;
+		  display: flex;
+		  flex-flow: row nowrap;
+		  justify-content: center;
+		  align-items: center;
+		}
         .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.1);
-        }
+		  width: 90%;
+		  max-width: 120em;
+		  padding: 2em;
+		  color: var(--negro);
+		  transition: all 0.4s ease;
+		  border-radius: 1em;
+		  background-color: #1c2b3a ;
+		  box-shadow: 1em 1em 2em var(--sombra-ppal), -1em -1em 2em var(--sombra-sec), inset 0 0 0 transparent, inset 0 0 0 transparent;
+		  overflow: hidden;
+		  display: block;
+		}
         h1 {
             color: #2c3e50;
             margin-bottom: 30px;
@@ -45,7 +60,7 @@
         .results-btn {
             display: inline-block;
             padding: 12px 25px;
-            background: #3498db;
+            background: #3230bd;
             color: white;
             text-decoration: none;
             border-radius: 5px;
@@ -55,11 +70,61 @@
         .results-btn:hover {
             background: #2980b9;
         }
+        
+        .home-btn {
+        	background-color: #e74c3c;
+        	display: inline-block;
+            padding: 12px 25px;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+            transition: background 0.3s;  
+        }
+        .home-btn:hover {
+        	background-color: #c0392b;  
+        }
+        
+        .titulo {
+		    display: flex;
+		    flex-direction: column;
+		    align-items: center;
+		    justify-content: center;
+		    text-align: center;
+		    width: 100%;
+		    padding: 20px;
+		}
+		
+		h1 {
+		    font-size: 28px;
+		    color: white;
+		    margin-bottom: 20px;
+		}
+		.cali-btn {
+		    flex-direction: column;
+		    align-items: center;
+		    justify-content: center;
+		    text-align: center;
+		    width: 100%;
+		    padding: 10px;
+		}
+		.menu-btn {
+		    flex-direction: column;
+		    align-items: center;
+		    justify-content: center;
+		    text-align: center;
+		    width: 100%;	
+		}
+        
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Juegos Matemáticos</h1>
+    
+	    <div class="titulo">
+	    	<h1>Juegos Matemáticos</h1>
+	    </div>
+        
         
         <div class="game-options">
             <!-- Tu juego de geometría -->
@@ -80,6 +145,7 @@
             </a>
         </div>
         
+        <div class="cali-btn">
         <!-- Botón para ver resultados -->
         <a th:href="@{/juegos/puntuaciones/lista-geometria}" class="results-btn">
             Ver Resultados de Geometría
@@ -88,10 +154,12 @@
          <a href="/juegos/puntuaciones/clasificacion" class="results-btn">
          Ver resultados de clasificación
          </a>
+        </div>
+
         
         <!-- Opcional: Botón para volver al menú principal -->
-        <div style="margin-top: 30px;">
-            <a th:href="@{/home}" class="results-btn" style="background: #7f8c8d;">
+        <div class="menu-btn">
+            <a th:href="@{/home}" class="home-btn" >
                 Volver al Menú Principal
             </a>
         </div>

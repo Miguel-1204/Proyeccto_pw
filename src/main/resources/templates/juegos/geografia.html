@@ -5,27 +5,41 @@
   <title>Juego de Geografía</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      background: #f5f5f5;
+      font-family: var(--tipo-principal, Arial, sans-serif);
+      font-size: 100%;
+      line-height: 1.4em;
+      min-height: 100vh;
+      background-color: #2b3e52;
+      color: var(--negro, #000);
+      -webkit-hyphens: auto;
+              hyphens: auto;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      display: flex;
+      flex-flow: row nowrap;
+      justify-content: center;
+      align-items: center;
       margin: 0;
       padding: 20px;
     }
     .container {
       background: #fff;
       max-width: 800px;
+      width: 100%;
       margin: 0 auto;
       border-radius: 8px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      padding: 20px;
+      padding: 20px 40px;
     }
     h1 {
       color: #2c3e50;
+      text-align: center;
       margin-bottom: 20px;
     }
     .pregunta {
       font-size: 20px;
       margin-bottom: 20px;
+      text-align: center;
     }
     .imagen-container {
       margin: 20px auto;
@@ -42,6 +56,7 @@
     }
     .opciones {
       margin-top: 20px;
+      text-align: center;
     }
     .opciones button {
       margin: 10px;
@@ -61,6 +76,11 @@
       margin-top: 20px;
       font-size: 18px;
       font-weight: bold;
+      text-align: center;
+    }
+    .acciones {
+      margin-top: 20px;
+      text-align: center;
     }
     .acciones button {
       margin: 20px 10px 0;
@@ -110,10 +130,10 @@
     <!-- Mensaje de retroalimentación -->
     <p id="mensaje"></p>
     
-    <!-- Botón de acción: Siguiente o Volver a inicio -->
+    <!-- Botones de acción: Siguiente y Volver al Menú Principal -->
     <div class="acciones">
       <button id="btnNext" class="btn-next" style="display:none;" onclick="siguientePregunta()">Siguiente</button>
-      <button id="btnHome" class="btn-home" style="display:none;" onclick="window.location.href='/home'">Volver a Inicio</button>
+      <button id="btnHome" class="btn-home" style="display:inline-block;" onclick="window.location.href='/home'">Volver al Menú Principal</button>
     </div>
     
     <script>
@@ -159,36 +179,38 @@
           : "Incorrecto. La respuesta correcta es: " + respuestaCorrecta;
         document.getElementById("mensaje").innerText = mensaje;
         
-         // Guardar el resultado en la base de datos
-   		 guardarPuntuacionGeografia(esCorrecto);
-   		 
+        // Guardar el resultado en la base de datos
+        guardarPuntuacionGeografia(esCorrecto);
+        
         // Si aún quedan preguntas, mostrar botón para pasar a la siguiente.
-        // Si es la última, mostrar botón para regresar a inicio.
+        // Si es la última, solo se muestra el botón para regresar a inicio.
         if (currentIndex < preguntas.length - 1) {
           document.getElementById("btnNext").style.display = "inline-block";
+          document.getElementById("btnHome").style.display = "inline-block";
         } else {
           document.getElementById("btnHome").style.display = "inline-block";
         }
       }
-      //Funcion para guardar los datos en la bd
+      
+      // Función para guardar los datos en la base de datos
       function guardarPuntuacionGeografia(victoria) {
-		    fetch('/juegos/guardar-puntuacion-geografia', {
-		        method: 'POST',
-		        headers: {
-		            'Content-Type': 'application/json',
-		        },
-		        body: JSON.stringify({ victoria: victoria })
-		    })
-		    .then(response => {
-		        if (!response.ok) {
-		            throw new Error('Error al guardar la puntuación');
-		        }
-		        console.log('Puntuación guardada correctamente');
-		    })
-		    .catch(error => {
-		        console.error('Error:', error);
-		    });
-		}
+        fetch('/juegos/guardar-puntuacion-geografia', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ victoria: victoria })
+        })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Error al guardar la puntuación');
+          }
+          console.log('Puntuación guardada correctamente');
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+      }
       
       // Función para cargar la siguiente pregunta
       function siguientePregunta() {
@@ -201,7 +223,7 @@
           // Actualizar la respuesta correcta y la imagen
           respuestaCorrecta = preguntas[currentIndex].respuesta;
           document.getElementById("departamentoImg").src = preguntas[currentIndex].imagen;
-          // Ocultar el botón de Siguiente para la nueva pregunta.
+          // Ocultar el botón de Siguiente para la nueva pregunta
           document.getElementById("btnNext").style.display = "none";
         }
       }

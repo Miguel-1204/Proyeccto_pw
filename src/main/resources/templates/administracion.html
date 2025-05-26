@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel de Administración</title>
+    <!-- Puedes incluir aquí Bootstrap, ya sea vía CDN o recursos locales -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+      /* Algunos estilos personalizados */
+      .container { margin-top: 30px; }
+      .dropdown { margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Panel de Administración</h1>
+        
+        <!-- Botón desplegable para seleccionar opción -->
+        <div class="dropdown">
+            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownOpciones" data-bs-toggle="dropdown" aria-expanded="false">
+                Seleccione una opción
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownOpciones">
+                <li>
+                    <a class="dropdown-item" href="#" onclick="showSection('listaUsuarios')">
+                        Lista de Usuarios
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item" href="#" onclick="showSection('puntuacionUsuario')">
+                        Puntuación por Usuario
+                    </a>
+                </li>
+            </ul>
+        </div>
+        
+        <!-- Sección para Lista de Usuarios -->
+        <div id="listaUsuarios" style="display:none">
+            <h2>Lista de Usuarios</h2>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre de Usuario</th>
+                        <th>Email</th>
+                        <th>Roles</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Se asume que en el modelo viene una variable "usuarios" -->
+                    <tr th:each="usuario : ${usuarios}">
+                        <td th:text="${usuario.id}">1</td>
+                        <td th:text="${usuario.username}">usuario1</td>
+                        <td th:text="${usuario.email}">user@example.com</td>
+                        <!-- Aquí se muestra la lista de roles, puedes ajustar según tu lógica -->
+                        <td th:text="${#strings.arrayJoin(usuario.roles.?[nombre], ', ')}">USUARIO</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Sección para Puntuación por Usuario -->
+        <div id="puntuacionUsuario" style="display:none">
+            <h2>Puntuación por Usuario</h2>
+            <!-- Formulario para buscar puntuación por nombre de usuario -->
+            <form th:action="@{/admin/buscar-puntuacion}" method="get">
+                <div class="mb-3">
+                    <label for="usernameInput" class="form-label">Nombre de Usuario:</label>
+                    <input type="text" class="form-control" id="usernameInput" name="username" placeholder="Ingrese el nombre de usuario" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Buscar</button>
+            </form>
+            
+            <!-- Se asume que al procesar el formulario, el controlador pone en el modelo un objeto "puntuaciones" -->
+            <div th:if="${puntuaciones != null}" class="mt-4">
+                <h3>Puntuaciones de <span th:text="${puntuaciones.username}">usuario</span></h3>
+                
+                <!-- Tabla para Inglés -->
+                <h4>Inglés</h4>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Puntuación</th>
+                            <th>Fecha</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="p : ${puntuaciones.ingles}">
+                            <td th:text="${p.id}">1</td>
+                            <td th:text="${p.puntuacion}">90</td>
+                            <td th:text="${p.fecha}">2023-01-01</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <!-- Tabla para Geometría -->
+                <h4>Geometría</h4>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Puntuación</th>
+                            <th>Fecha</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="p : ${puntuaciones.geometria}">
+                            <td th:text="${p.id}">1</td>
+                            <td th:text="${p.puntuacion}">85</td>
+                            <td th:text="${p.fecha}">2023-01-01</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <!-- Tabla para Clasificación -->
+                <h4>Clasificación</h4>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Puntuación</th>
+                            <th>Fecha</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="p : ${puntuaciones.clasificacion}">
+                            <td th:text="${p.id}">1</td>
+                            <td th:text="${p.puntuacion}">92</td>
+                            <td th:text="${p.fecha}">2023-01-01</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <!-- Tabla para Geografía -->
+                <h4>Geografía</h4>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Puntuación</th>
+                            <th>Fecha</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="p : ${puntuaciones.geografia}">
+                            <td th:text="${p.id}">1</td>
+                            <td th:text="${p.puntuacion}">88</td>
+                            <td th:text="${p.fecha}">2023-01-01</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+    </div>
+    
+    <!-- Bootstrap Bundle con Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Función para mostrar una sección y ocultar la otra
+        function showSection(sectionId) {
+            document.getElementById('listaUsuarios').style.display = 'none';
+            document.getElementById('puntuacionUsuario').style.display = 'none';
+            document.getElementById(sectionId).style.display = 'block';
+        }
+    </script>
+</body>
+</html>

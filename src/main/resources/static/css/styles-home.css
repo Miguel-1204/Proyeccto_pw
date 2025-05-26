@@ -96,23 +96,23 @@ form, input, textarea, select, button {
   display: block;
 }
 
-body {
-  font-family: var(--tipo-principal);
-  font-size: 100%;
-  line-height: 1.4em;
-  min-height: 100vh;
-  background-color: var(--blanco);
-  color: var(--negro);
-  -webkit-hyphens: auto;
-          hyphens: auto;
-  font-smooth: always;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  display: flex;
-  flex-flow: row nowrap;
-  justify-content: center;
-  align-items: center;
-}
+		body {
+		  font-family: var(--tipo-principal);
+		  font-size: 100%;
+		  line-height: 1.4em;
+		  min-height: 100vh;
+		  background-color: #2b3e52;
+		  color: var(--negro);
+		  -webkit-hyphens: auto;
+		          hyphens: auto;
+		  font-smooth: always;
+		  -webkit-font-smoothing: antialiased;
+		  -moz-osx-font-smoothing: grayscale;
+		  display: flex;
+		  flex-flow: row nowrap;
+		  justify-content: center;
+		  align-items: center;
+		}
 
 .carrousel {
   width: 90%;
@@ -121,7 +121,7 @@ body {
   color: var(--negro);
   transition: all 0.4s ease;
   border-radius: 1em;
-  background-color: var(--blanco);
+  background-color: #1c2b3a;
   box-shadow: 1em 1em 2em var(--sombra-ppal), -1em -1em 2em var(--sombra-sec), inset 0 0 0 transparent, inset 0 0 0 transparent;
   overflow: hidden;
 }
@@ -135,7 +135,7 @@ body {
   color: var(--negro);
   transition: all 0.4s ease;
   border-radius: 1em;
-  background-color: var(--blanco);
+  background-color: #1c2b3a;
   box-shadow: 1em 1em 2em var(--sombra-ppal), -1em -1em 2em var(--sombra-sec), inset 0 0 0 transparent, inset 0 0 0 transparent;
   padding: 2em;
   transition: all 0.5s ease;
@@ -200,7 +200,7 @@ body {
     bottom: 0;
     left: 0;
     right: 0;
-    background: rgba(0, 0, 0, 0.5); /* Fondo oscuro translúcido */
+    background: rgba(0, 0, 0, 0.7); /* Fondo oscuro translúcido */
     color: var(--blanco);
     padding: 0.5em;
     font-size: 1em;
@@ -209,6 +209,7 @@ body {
     border-radius: 0 0 1em 1em; /* Redondea igual que la imagen */
     box-shadow: inset 0 -0.2em 0.5em rgba(0, 0, 0, 0.3);
     pointer-events: none;
+    color: #ffffff ;
   }
   
 /* link de imagenes */
@@ -233,8 +234,8 @@ body {
     padding: 0.8em 2em;
     font-size: 1.1em;
     font-weight: bold;
-    color: var(--blanco);
-    background-color: var(--negro);
+    color: #ffffff;
+    background-color: #3230bd;
     border-radius: 0.5em;
     text-decoration: none;
     box-shadow: 0 0.4em 0.8em rgba(0, 0, 0, 0.2);

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Registro de Usuario</title>
+  <style>
+    body {
+      font-family: var(--tipo-principal, Arial, sans-serif);
+      background-color: #2b3e52;
+      color: #000;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .container {
+      background: #fff;
+      width: 100%;
+      max-width: 500px;
+      padding: 20px 40px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    h1 {
+      color: #2c3e50;
+      margin-bottom: 20px;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    select {
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 16px;
+    }
+    button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      background: #3498db;
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s;
+      font-size: 16px;
+      margin-top: 10px;
+    }
+    button:hover {
+      background: #2980b9;
+    }
+    .error {
+      color: red;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+    @media (max-width: 600px) {
+      .container {
+        padding: 15px 20px;
+      }
+      input[type="text"],
+      input[type="email"],
+      input[type="password"],
+      select {
+        font-size: 14px;
+      }
+      button {
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Registro de Usuario</h1>
+    
+    <!-- El objeto 'usuario' se inyecta en el formulario -->
+    <form th:action="@{/registro}" th:object="${usuario}" method="post">
+      <!-- Campo para el nombre de usuario -->
+      <input type="text" th:field="*{username}" placeholder="Nombre de usuario" required />
+      
+      <!-- Campo para escoger el rol; este valor se usará para recuperar la entidad Rol -->
+      <select name="userRole" required>
+        <option value="" disabled selected>Selecciona un rol</option>
+        <option value="usuario">Usuario</option>
+        <option value="educador">Educador</option>
+      </select>
+      
+      <input type="email" th:field="*{email}" placeholder="Email" required />
+      <input type="password" th:field="*{password}" placeholder="Contraseña" required />
+      <input type="password" name="confirmPassword" placeholder="Confirmar contraseña" required />
+      
+      <!-- Si ocurre algún error (p.ej. contraseñas incorrectas o rol duplicado), se muestra -->
+      <div th:if="${registroError}" class="error" th:text="${registroError}"></div>
+      
+      <button type="submit">Registrar</button>
+    </form>
+    
+    <br>
+    <a th:href="@{/home}" style="text-decoration: none; color:#3498db;">Volver al Inicio</a>
+  </div>
+</body>
+</html>
