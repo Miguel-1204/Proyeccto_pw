@@ -62,19 +62,40 @@
       font-size: 18px;
       font-weight: bold;
     }
+    .acciones button {
+      margin: 20px 10px 0;
+      padding: 10px 20px;
+      font-size: 16px;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .btn-next {
+      background: #2ecc71;
+    }
+    .btn-next:hover {
+      background: #27ae60;
+    }
+    .btn-home {
+      background: #e74c3c;
+    }
+    .btn-home:hover {
+      background: #c0392b;
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>Juego de Geografía</h1>
     
-    <!-- Pregunta actualizada -->
-    <p class="pregunta">¿Qué región de Colombia es la que se muestra RESALTADA en la imagen?</p>
+    <!-- Pregunta fija -->
+    <p class="pregunta">¿Qué región de Colombia es la que se muestra en la imagen?</p>
     
-    <!-- Imagen del departamento o región -->
+    <!-- Contenedor de la imagen -->
     <div class="imagen-container">
-      <!-- Inyecta la imagen de forma dinámica usando Thymeleaf, por ejemplo: -->
-      <img id="departamentoImg" th:src="@{${imagenDepartamento}}" alt="Departamento">
+      <img id="departamentoImg" src="" alt="Departamento">
     </div>
     
     <!-- Opciones de respuesta -->
@@ -86,21 +107,102 @@
       <button onclick="enviarRespuesta('Amazonía')">Amazonía</button>
     </div>
     
-    <!-- Mensaje de resultado -->
+    <!-- Mensaje de retroalimentación -->
     <p id="mensaje"></p>
+    
+    <!-- Botón de acción: Siguiente o Volver a inicio -->
+    <div class="acciones">
+      <button id="btnNext" class="btn-next" style="display:none;" onclick="siguientePregunta()">Siguiente</button>
+      <button id="btnHome" class="btn-home" style="display:none;" onclick="window.location.href='/home'">Volver a Inicio</button>
+    </div>
     
     <script>
       console.log("Script de geografía cargado");
       
-      // Inyección de la respuesta correcta. Se podría inyectar desde el controlador
-      var respuestaCorrecta = "[[${respuestaCorrecta}]]"; // Ejemplo: "Andina"
+      // Array de preguntas (5 departamentos de Colombia)
+      var preguntas = [
+        { imagen: "/img/geografia/andina.png", respuesta: "Andina" },
+        { imagen: "/img/geografia/caribe.png", respuesta: "Caribe" },
+        { imagen: "/img/geografia/pacifico.png", respuesta: "Pacífico" },
+        { imagen: "/img/geografia/orinoquia.png", respuesta: "Orinoquía" },
+        { imagen: "/img/geografia/amazonia.png", respuesta: "Amazonía" }
+      ];
       
-      // Función para evaluar la respuesta
+      // Función para barajar el array (Fisher-Yates shuffle)
+      function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+          let j = Math.floor(Math.random() * (i + 1));
+          [array[i], array[j]] = [array[j], array[i]];
+        }
+      }
+      
+      // Barajar y preparar las preguntas
+      shuffle(preguntas);
+      var currentIndex = 0;
+      // Variable que guarda la respuesta correcta de la pregunta actual
+      var respuestaCorrecta = preguntas[currentIndex].respuesta;
+      
+      // Cargar la primera imagen
+      document.getElementById("departamentoImg").src = preguntas[currentIndex].imagen;
+      
+      // Bandera para controlar si ya se respondió la pregunta actual
+      var respuestaSeleccionada = false;
+      
+      // Función para evaluar la respuesta del usuario
       function enviarRespuesta(opcion) {
-        if (opcion.trim().toLowerCase() === respuestaCorrecta.trim().toLowerCase()) {
-          document.getElementById('mensaje').innerText = "¡Correcto!";
+        if (respuestaSeleccionada) return;
+        respuestaSeleccionada = true;
+        
+        var esCorrecto = opcion.trim().toLowerCase() === respuestaCorrecta.trim().toLowerCase();
+        var mensaje = esCorrecto
+          ? "Correcto"
+          : "Incorrecto. La respuesta correcta es: " + respuestaCorrecta;
+        document.getElementById("mensaje").innerText = mensaje;
+        
+         // Guardar el resultado en la base de datos
+   		 guardarPuntuacionGeografia(esCorrecto);
+   		 
+        // Si aún quedan preguntas, mostrar botón para pasar a la siguiente.
+        // Si es la última, mostrar botón para regresar a inicio.
+        if (currentIndex < preguntas.length - 1) {
+          document.getElementById("btnNext").style.display = "inline-block";
         } else {
-          document.getElementById('mensaje').innerText = "Incorrecto. La respuesta correcta es: " + respuestaCorrecta;
+          document.getElementById("btnHome").style.display = "inline-block";
+        }
+      }
+      //Funcion para guardar los datos en la bd
+      function guardarPuntuacionGeografia(victoria) {
+		    fetch('/juegos/guardar-puntuacion-geografia', {
+		        method: 'POST',
+		        headers: {
+		            'Content-Type': 'application/json',
+		        },
+		        body: JSON.stringify({ victoria: victoria })
+		    })
+		    .then(response => {
+		        if (!response.ok) {
+		            throw new Error('Error al guardar la puntuación');
+		        }
+		        console.log('Puntuación guardada correctamente');
+		    })
+		    .catch(error => {
+		        console.error('Error:', error);
+		    });
+		}
+      
+      // Función para cargar la siguiente pregunta
+      function siguientePregunta() {
+        // Incrementa el índice para la siguiente pregunta
+        currentIndex++;
+        if (currentIndex < preguntas.length) {
+          respuestaSeleccionada = false;
+          // Limpiar el mensaje de retroalimentación
+          document.getElementById("mensaje").innerText = "";
+          // Actualizar la respuesta correcta y la imagen
+          respuestaCorrecta = preguntas[currentIndex].respuesta;
+          document.getElementById("departamentoImg").src = preguntas[currentIndex].imagen;
+          // Ocultar el botón de Siguiente para la nueva pregunta.
+          document.getElementById("btnNext").style.display = "none";
         }
       }
     </script>

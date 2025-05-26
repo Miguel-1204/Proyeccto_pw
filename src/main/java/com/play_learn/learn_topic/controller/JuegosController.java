@@ -320,24 +320,38 @@ public class JuegosController {
     @PostMapping("/guardar-puntuacion-geografia")
     public ResponseEntity<?> guardarPuntuacionGeografia(@RequestBody Map<String, Object> datos) {
         try {
-            // Ya no se recibe ni procesa el tiempo, solo el indicador de victoria.
+            // Verifica que el campo "victoria" existe
+            if (!datos.containsKey("victoria")) {
+                return ResponseEntity.badRequest().body("{\"error\": \"Falta el campo 'victoria'\"}");
+            }
+
             boolean victoria = Boolean.parseBoolean(datos.get("victoria").toString());
             
             // Obtener el usuario autenticado
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
             String username = auth.getName();
             
+            // Validar que el username no sea null o vacío
+            if (username == null || username.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("{\"error\": \"Usuario no autenticado\"}");
+            }
+
             PuntuacionGeografia puntuacion = new PuntuacionGeografia();
             puntuacion.setUsername(username);
             puntuacion.setVictoria(victoria);
             puntuacion.setFecha(LocalDateTime.now());
             
+            // Guardar en base de datos
             puntuacionGeografiaRepository.save(puntuacion);
+            
+            // Log para depuración
+            System.out.println("Puntuación guardada: " + puntuacion);
             
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                   .body("{\"error\": \"Error al guardar la puntuación: " + e.getMessage() + "\"}");
         }
     }
     

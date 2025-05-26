@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Resultados de Geografía</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f5f5f5;
+    }
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h1 {
+      color: #2c3e50;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+    th, td {
+      padding: 12px 15px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+    th {
+      background-color: #4CAF50;
+      color: white;
+      font-weight: bold;
+    }
+    tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+    tr:hover {
+      background-color: #e9e9e9;
+    }
+    .victoria {
+      color: #2ecc71;
+      font-weight: bold;
+    }
+    .derrota {
+      color: #e74c3c;
+      font-weight: bold;
+    }
+    .actions {
+      margin-top: 20px;
+      text-align: center;
+    }
+    .btn {
+      display: inline-block;
+      padding: 10px 20px;
+      background: #3498db;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      margin: 0 10px;
+      transition: background 0.3s;
+    }
+    .btn:hover {
+      background: #2980b9;
+    }
+    .btn-danger {
+      background: #e74c3c;
+    }
+    .btn-danger:hover {
+      background: #c0392b;
+    }
+    .empty-message {
+      text-align: center;
+      color: #7f8c8d;
+      padding: 20px;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Resultados de Geografía</h1>
+    
+    <!-- Si no hay resultados, se muestra un mensaje -->
+    <div th:if="${puntuaciones.isEmpty()}">
+      <p class="empty-message">No hay resultados registrados todavía.</p>
+    </div>
+    
+    <!-- Si hay resultados, se muestra la tabla -->
+    <table th:unless="${puntuaciones.isEmpty()}">
+      <thead>
+        <tr>
+          <th>Usuario</th>
+          <th>Resultado</th>
+          <th>Fecha</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="puntuacion : ${puntuaciones}">
+          <td th:text="${puntuacion.username}">Usuario</td>
+          <td>
+            <span th:text="${puntuacion.victoria} ? 'Correcto' : 'Incorrecto'" 
+                  th:class="${puntuacion.victoria} ? 'victoria' : 'derrota'">
+              Resultado
+            </span>
+          </td>
+          <td th:text="${#temporals.format(puntuacion.fecha, 'dd/MM/yyyy HH:mm')}">Fecha</td>
+        </tr>
+      </tbody>
+    </table>
+    
+    <!-- Acciones -->
+    <div class="actions">
+      <a th:href="@{/juegos/geografia}" class="btn">Jugar de nuevo</a>
+      <a th:href="@{/home}" class="btn">Volver al inicio</a>
+      <form th:action="@{/juegos/puntuaciones/eliminar-geografia}" method="post" style="display: inline;">
+        <button type="submit" class="btn btn-danger">Eliminar todos los resultados</button>
+      </form>
+    </div>
+  </div>
+</body>
+</html>
