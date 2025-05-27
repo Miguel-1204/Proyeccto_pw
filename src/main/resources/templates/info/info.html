@@ -2,7 +2,7 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>Acerca de Learn_Topic</title>
+  <title th:text="#{titulo.pagina}">Acerca de Learn_Topic</title>
   <style>
     body {
       font-family: var(--tipo-principal);
@@ -74,23 +74,17 @@
 </head>
 <body>
   <div class="container">
-    <h1>Learn_Topic</h1>
+    <h1 th:text="#{titulo.learn_topic}">Learn_Topic</h1>
     
-    <!-- Imagen del avatar (coloca la imagen en la ruta correspondiente, por ejemplo: /img/avatar.png) -->
+    <!-- Imagen del avatar -->
     <img class="avatar" th:src="@{/img/avatar.png}" alt="Avatar de Learn_Topic">
     
-    <p class="info-text">
+    <p class="info-text" th:text="#{descripcion.learn_topic}">
       Bienvenidos a <strong>Learn_Topic</strong>, una plataforma innovadora dedicada a transformar el aprendizaje para niños en etapa escolar (primaria). Aquí creemos que la educación debe ser interactiva, lúdica y, sobre todo, emocionante.
-      <br><br>
-      Nuestro objetivo principal es ayudar a los niños a descubrir y desarrollar sus habilidades a través de juegos y estrategias llamativas, haciendo que el proceso educativo sea divertido y significativo. Mediante actividades interactivas, buscamos fortalecer la curiosidad, el pensamiento crítico y la creatividad, ofreciendo una experiencia educativa que se adapta a la forma natural en que aprenden los pequeños.
-      <br><br>
-      Creemos en un futuro donde la tecnología y la educación se unen para crear ambientes de aprendizaje inclusivos y estimulantes, apoyando tanto a padres como a docentes en el desarrollo integral de cada niño.
-      <br><br>
-      ¡Acompáñanos en este emocionante viaje para revolucionar la educación, transformándola en una aventura diaria llena de descubrimientos y diversión!
     </p>
     
     <div class="actions">
-      <a th:href="@{/home}" class="btn btn-danger">Volver al Menú Principal</a>
+      <a th:href="@{/home}" class="btn btn-danger" th:text="#{boton.volver.menu}">Volver al Menú Principal</a>
     </div>
   </div>
 </body>

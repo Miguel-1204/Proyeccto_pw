@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Nivel Completado</title>
+    <title th:text="#{titulo.pagina}">Nivel Completado</title>
     <style>
         .puntuacion {
             font-size: 2em;
@@ -23,15 +23,15 @@
     </style>
 </head>
 <body>
-    <h1>¡Nivel Completado!</h1>
+    <h1 th:text="#{mensaje.nivel.completado}">¡Nivel Completado!</h1>
     
     <div class="puntuacion">
-        Puntuación final: <span th:text="${puntuacion}"></span>
+        <span th:text="#{mensaje.puntuacion}">Puntuación final:</span> <span th:text="${puntuacion}"></span>
     </div>
     
     <div class="botones">
-        <a th:href="@{/juegos/ingles(nivel=${nivel})}">Repetir nivel</a>
-        <a th:href="@{/home}">Volver al inicio</a>
+        <a th:href="@{/juegos/ingles(nivel=${nivel})}" th:text="#{boton.repetir.nivel}">Repetir nivel</a>
+        <a th:href="@{/home}" th:text="#{boton.volver.inicio}">Volver al inicio</a>
     </div>
 </body>
 </html>

@@ -2,8 +2,8 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>Registro de Usuario</title>
-  <style>
+  <title th:text="#{titulo.pagina}">Registro de Usuario</title>
+<style>
     body {
       font-family: var(--tipo-principal, Arial, sans-serif);
       background-color: #2b3e52;
@@ -79,32 +79,28 @@
 </head>
 <body>
   <div class="container">
-    <h1>Registro de Usuario</h1>
+    <h1 th:text="#{titulo.registro}">Registro de Usuario</h1>
     
-    <!-- El objeto 'usuario' se inyecta en el formulario -->
     <form th:action="@{/registro}" th:object="${usuario}" method="post">
-      <!-- Campo para el nombre de usuario -->
-      <input type="text" th:field="*{username}" placeholder="Nombre de usuario" required />
+      <input type="text" th:field="*{username}" th:placeholder="#{campo.usuario}" required />
       
-      <!-- Campo para escoger el rol; este valor se usará para recuperar la entidad Rol -->
       <select name="userRole" required>
-        <option value="" disabled selected>Selecciona un rol</option>
-        <option value="usuario">Usuario</option>
-        <option value="educador">Educador</option>
+        <option value="" disabled selected th:text="#{campo.seleccionar.rol}">Selecciona un rol</option>
+        <option value="usuario" th:text="#{campo.rol.usuario}">Usuario</option>
+        <option value="educador" th:text="#{campo.rol.educador}">Educador</option>
       </select>
       
-      <input type="email" th:field="*{email}" placeholder="Email" required />
-      <input type="password" th:field="*{password}" placeholder="Contraseña" required />
-      <input type="password" name="confirmPassword" placeholder="Confirmar contraseña" required />
+      <input type="email" th:field="*{email}" th:placeholder="#{campo.email}" required />
+      <input type="password" th:field="*{password}" th:placeholder="#{campo.contrasena}" required />
+      <input type="password" name="confirmPassword" th:placeholder="#{campo.confirmar.contrasena}" required />
       
-      <!-- Si ocurre algún error (p.ej. contraseñas incorrectas o rol duplicado), se muestra -->
       <div th:if="${registroError}" class="error" th:text="${registroError}"></div>
       
-      <button type="submit">Registrar</button>
+      <button type="submit" th:text="#{boton.registrar}">Registrar</button>
     </form>
     
     <br>
-    <a th:href="@{/home}" style="text-decoration: none; color:#3498db;">Volver al Inicio</a>
+    <a th:href="@{/home}" style="text-decoration: none; color:#3498db;" th:text="#{boton.volver.inicio}">Volver al Inicio</a>
   </div>
 </body>
 </html>

@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Resultados de Geometría</title>
+    <title th:text="#{titulo.pagina}">Resultados de Geometría</title>
     <style>
 		body {
 		  font-family: var(--tipo-principal);
@@ -95,19 +95,19 @@
 </head>
 <body>
     <div class="container">
-        <h1>Resultados de Geometría</h1>
+        <h1 th:text="#{titulo.resultados}">Resultados de Geometría</h1>
         
         <div th:if="${puntuaciones.isEmpty()}">
-            <p class="empty-message">No hay resultados registrados todavía.</p>
+            <p class="empty-message" th:text="#{mensaje.sin.resultados}">No hay resultados registrados todavía.</p>
         </div>
         
         <table th:unless="${puntuaciones.isEmpty()}">
             <thead>
                 <tr>
-                    <th>Usuario</th>
-                    <th>Tiempo (segundos)</th>
-                    <th>Resultado</th>
-                    <th>Fecha</th>
+                    <th th:text="#{tabla.usuario}">Usuario</th>
+                    <th th:text="#{tabla.tiempo}">Tiempo (segundos)</th>
+                    <th th:text="#{tabla.resultado}">Resultado</th>
+                    <th th:text="#{tabla.fecha}">Fecha</th>
                 </tr>
             </thead>
             <tbody>
@@ -115,8 +115,8 @@
                     <td th:text="${puntuacion.username}">Usuario</td>
                     <td th:text="${puntuacion.tiempo}">0</td>
                     <td>
-                        <span th:class="${puntuacion.victoria} ? 'victoria' : 'derrota'"
-                              th:text="${puntuacion.victoria} ? 'Victoria' : 'Derrota'">
+                        <span th:text="${puntuacion.victoria} ? #{resultado.victoria} : #{resultado.derrota}"
+                              th:class="${puntuacion.victoria} ? 'victoria' : 'derrota'">
                             Resultado
                         </span>
                     </td>
@@ -126,10 +126,10 @@
         </table>
         
         <div class="actions">
-            <a th:href="@{/juegos/matematicas/geometria}" class="btn">Jugar de nuevo</a>
-            <a th:href="@{/juegos/home-matematicas}" class="btn">Volver al inicio</a>
+            <a th:href="@{/juegos/matematicas/geometria}" class="btn" th:text="#{boton.jugar.nuevamente}">Jugar de nuevo</a>
+            <a th:href="@{/juegos/home-matematicas}" class="btn" th:text="#{boton.volver.inicio}">Volver al inicio</a>
             <form th:action="@{/juegos/puntuaciones/eliminar-geometria}" method="post" style="display: inline;">
-                <button type="submit" class="btn btn-danger">Eliminar todos los resultados</button>
+                <button type="submit" class="btn btn-danger" th:text="#{boton.borrar.resultados}">Eliminar todos los resultados</button>
             </form>
         </div>
     </div>

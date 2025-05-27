@@ -2,7 +2,7 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>Clasificación de Números</title>
+  <title th:text="#{titulo.pagina}">Clasificación de Números</title>
   <style>
     /* Estilos Globales */
     body {
@@ -103,7 +103,7 @@
 </head>
 <body>
   <div class="container">
-    <h1>Seleccione los números impares</h1>
+    <h1 th:text="#{titulo.instruccion}">Seleccione los números impares</h1>
     
     <div>
       <img th:src="@{${imagenes[0]}}" class="numero-img" th:onclick="'seleccionarNumero(' + ${numeros[0]} + ', this)'">
@@ -112,7 +112,7 @@
     </div>
     
     <p id="resultado" class="mensaje"></p>
-    <button onclick="validarSeleccion()">Validar respuesta</button>
+    <button onclick="validarSeleccion()" th:text="#{boton.validar}">Validar respuesta</button>
     
     <!-- Inyección del array de números y cálculo de totalCorrect -->
     <script th:inline="javascript">
@@ -170,7 +170,7 @@
     </script>
     
     <br>
-    <a href="/juegos/home-matematicas">Volver al inicio</a>
+    <a href="/juegos/home-matematicas" th:text="#{enlace.volver}">Volver al inicio</a>
   </div>
 </body>
 </html>

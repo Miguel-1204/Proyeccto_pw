@@ -2,8 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Juegos Matemáticos</title>
-    <style>
+    <title th:text="#{titulo.pagina}">Juegos Matemáticos</title>
+<style>
 		body {
 		  font-family: var(--tipo-principal);
 		  font-size: 100%;
@@ -120,56 +120,47 @@
 </head>
 <body>
     <div class="container">
-    
-	    <div class="titulo">
-	    	<h1>Juegos Matemáticos</h1>
-	    </div>
-        
+        <div class="titulo">
+            <h1 th:text="#{titulo.juegos}">Juegos Matemáticos</h1>
+        </div>
         
         <div class="game-options">
-            <!-- Tu juego de geometría -->
             <a th:href="@{/juegos/matematicas/geometria}" class="game-card">
-                <h3>Geometría</h3>
-                <p>Adivina la figura oculta</p>
+                <h3 th:text="#{juego.geometria}">Geometría</h3>
+                <p th:text="#{descripcion.geometria}">Adivina la figura oculta</p>
             </a>
             
-            <!-- Otros juegos que tengas -->
             <a th:href="@{/juegos/matematicas/operaciones}" class="game-card">
-                <h3>Operaciones</h3>
-                <p>Resuelve problemas matemáticos</p>
+                <h3 th:text="#{juego.operaciones}">Operaciones</h3>
+                <p th:text="#{descripcion.operaciones}">Resuelve problemas matemáticos</p>
             </a>
             
             <a th:href="@{/juegos/matematicas/clasificacion}" class="game-card">
-                <h3>Clasificación</h3>
-                <p>Ordena los números correctamente</p>
+                <h3 th:text="#{juego.clasificacion}">Clasificación</h3>
+                <p th:text="#{descripcion.clasificacion}">Ordena los números correctamente</p>
             </a>
         </div>
         
         <div class="cali-btn">
-        <!-- Botón para ver resultados -->
-        <a th:href="@{/juegos/puntuaciones/lista-geometria}" class="results-btn">
-            Ver Resultados de Geometría
-        </a>
-        
-         <a href="/juegos/puntuaciones/clasificacion" class="results-btn">
-         Ver resultados de clasificación
-         </a>
+            <a th:href="@{/juegos/puntuaciones/lista-geometria}" class="results-btn" th:text="#{boton.ver.geometria}">
+                Ver Resultados de Geometría
+            </a>
+            <a href="/juegos/puntuaciones/clasificacion" class="results-btn" th:text="#{boton.ver.clasificacion}">
+                Ver resultados de clasificación
+            </a>
         </div>
 
-        
-        <!-- Opcional: Botón para volver al menú principal -->
         <div class="menu-btn">
-            <a th:href="@{/home}" class="home-btn" >
+            <a th:href="@{/home}" class="home-btn" th:text="#{boton.volver.menu}">
                 Volver al Menú Principal
             </a>
         </div>
-        
-            <script>
-		        function redirigir() {
-		            var juegoSeleccionado = document.getElementById("tipoJuego").value;
-		            window.location.href = "/juegos/matematicas/" + juegoSeleccionado;
-		        }
-		    </script>
+                   <script>
+				        function redirigir() {
+				            var juegoSeleccionado = document.getElementById("tipoJuego").value;
+				            window.location.href = "/juegos/matematicas/" + juegoSeleccionado;
+				        }
+				    </script>
     </div>
 </body>
 </html>

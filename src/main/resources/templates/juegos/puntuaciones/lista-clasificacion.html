@@ -2,7 +2,8 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Resultados - Clasificación de Números</title>
+    <title th:text="#{titulo.resultados}">Resultados - Clasificación de Números</title>
+    
     <style>
 		body {
 		  font-family: var(--tipo-principal);
@@ -92,23 +93,24 @@
             background: #c0392b;
         }
     </style>
+
 </head>
 <body>
     <div class="container">
-        <h1>Resultados Clasificación numérica</h1>
+        <h1 th:text="#{encabezado.resultados}">Resultados Clasificación numérica</h1>
         
         <!-- Si la lista de resultados está vacía, se muestra este mensaje -->
         <div th:if="${#lists.isEmpty(resultados)}">
-            <p class="empty-message">No hay resultados registrados todavía.</p>
+            <p class="empty-message" th:text="#{mensaje.vacio}">No hay resultados registrados todavía.</p>
         </div>
         
         <!-- Si la lista de resultados no está vacía, se muestra la tabla -->
         <table th:if="${!#lists.isEmpty(resultados)}">
             <thead>
                 <tr>
-                    <th>Usuario</th>
-                    <th>Ronda</th>
-                    <th>Aciertos</th>
+                    <th th:text="#{tabla.usuario}">Usuario</th>
+                    <th th:text="#{tabla.ronda}">Ronda</th>
+                    <th th:text="#{tabla.aciertos}">Aciertos</th>
                 </tr>
             </thead>
             <tbody>
@@ -123,10 +125,10 @@
         </table>
         
         <div class="actions">
-            <a th:href="@{/juegos/home-matematicas}" class="btn">Volver al inicio</a>
-            <a th:href="@{/juegos/matematicas/clasificacion(ronda=1)}" class="btn">Jugar nuevamente</a>
+            <a th:href="@{/juegos/home-matematicas}" class="btn" th:text="#{boton.volver}">Volver al inicio</a>
+            <a th:href="@{/juegos/matematicas/clasificacion(ronda=1)}" class="btn" th:text="#{boton.jugar}">Jugar nuevamente</a>
             <form th:action="@{/juegos/puntuaciones/eliminar}" method="post" style="display: inline;">
-                <button type="submit" class="btn btn-danger">Borrar Resultados</button>
+                <button type="submit" class="btn btn-danger" th:text="#{boton.borrar}">Borrar Resultados</button>
             </form>
         </div>
     </div>

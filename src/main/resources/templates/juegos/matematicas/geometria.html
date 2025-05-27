@@ -2,7 +2,7 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>Adivina la Figura</title>
+  <title th:text="#{titulo.pagina}">Adivina la Figura</title>
   <style>
     /* Estilos generales adaptados */
     body {
@@ -170,7 +170,7 @@
 </head>
 <body>
   <div class="container">
-    <h1>Adivina la Figura</h1>
+    <h1 th:text="#{titulo.instruccion}">¿Qué figura es?</h1>
     
     <div class="game-container">
       <!-- Rompecabezas: 3x3 grid -->
@@ -188,18 +188,18 @@
     
     <!-- Opciones de respuesta -->
     <div class="opciones">
-      <p>¿Qué figura es?</p>
-      <button onclick="enviarRespuesta('Triángulo')">Triángulo</button>
-      <button onclick="enviarRespuesta('Rectangulo')">Rectangulo</button>
-      <button onclick="enviarRespuesta('Pentágono')">Pentágono</button>
-      <button onclick="desbloquearCasillaAleatoria()">Desbloquear casilla aleatoria</button>
+      <p th:text="#{pregunta.figura}">¿Qué figura es?</p>
+      <button onclick="enviarRespuesta('Triángulo')" th:text="#{opcion.triangulo}">Triángulo</button>
+      <button onclick="enviarRespuesta('Rectangulo')" th:text="#{opcion.rectangulo}">Rectangulo</button>
+      <button onclick="enviarRespuesta('Pentágono')" th:text="#{opcion.pentagono}">Pentágono</button>
+      <button onclick="desbloquearCasillaAleatoria()" th:text="#{opcion.desbloquear}">Desbloquear casilla aleatoria</button>
     </div>
     
     <!-- Mensaje de resultado -->
     <p id="mensaje"></p>
     
     <br>
-    <a href="/juegos/home-matematicas">Volver al inicio</a>
+    <a href="/juegos/home-matematicas" th:text="#{enlace.volver}">Volver al inicio</a>
     
     <script>
       console.log("Script de geometría cargado");
@@ -239,7 +239,7 @@
         var mensaje = "";
         if (esCorrecto) {
           if (casillasDesbloqueadas < totalCasillas) {
-            mensaje = `¡Correcto! Ganaste con bonificación (${totalCasillas - casillasDesbloqueadas} casillas ocultas). Tiempo: ${tiempoRespuesta} segundos`;
+            mensaje = `¡Correcto! Ganaste con bonificación (${totalCorrect - casillasDesbloqueadas} casillas ocultas). Tiempo: ${tiempoRespuesta} segundos`;
           } else {
             mensaje = `¡Correcto! Pero revelaste toda la imagen. Tiempo: ${tiempoRespuesta} segundos`;
           }
@@ -259,11 +259,13 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ tiempo: tiempo, victoria: victoria })
         })
-        .then(response => {
-          if (!response.ok) throw new Error('Error guardando la puntuación');
-          console.log('Puntuación guardada exitosamente.');
+        .then(function(response) {
+          if (!response.ok) throw new Error("Error guardando la puntuación");
+          console.log("Puntuación guardada exitosamente.");
         })
-        .catch(error => console.error('Error:', error));
+        .catch(function(error) {
+          console.error('Error:', error);
+        });
       }
       
       // Función para desbloquear una casilla aleatoria

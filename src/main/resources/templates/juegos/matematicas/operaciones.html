@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>En Desarrollo</title>
+    <title th:text="#{titulo.pagina}">En Desarrollo</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -45,9 +45,9 @@
 </head>
 <body>
     <div class="container">
-        <h1>¡En desarrollo!</h1>
-        <p>Estamos trabajando en esta sección. Pronto habrá nuevos juegos.</p>
-        <a th:href="@{/juegos/home-matematicas}" class="btn">Volver al inicio</a>
+        <h1 th:text="#{titulo.desarrollo}">¡En desarrollo!</h1>
+        <p th:text="#{mensaje.desarrollo}">Estamos trabajando en esta sección. Pronto habrá nuevos juegos.</p>
+        <a th:href="@{/juegos/home-matematicas}" class="btn" th:text="#{boton.volver.inicio}">Volver al inicio</a>
     </div>
 </body>
 </html>

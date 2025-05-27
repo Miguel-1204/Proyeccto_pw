@@ -2,8 +2,8 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>Resultados de Geografía</title>
-  <style>
+  <title th:text="#{geografia.resultados.titulo}">Resultados de Geografía</title>
+<style>
 		body {
 		  font-family: var(--tipo-principal);
 		  font-size: 100%;
@@ -96,27 +96,27 @@
 </head>
 <body>
   <div class="container">
-    <h1>Resultados de Geografía</h1>
+    <h1 th:text="#{geografia.resultados.titulo}">Resultados de Geografía</h1>
     
     <!-- Si no hay resultados, se muestra un mensaje -->
     <div th:if="${puntuaciones.isEmpty()}">
-      <p class="empty-message">No hay resultados registrados todavía.</p>
+      <p class="empty-message" th:text="#{geografia.resultados.vacio}">No hay resultados registrados todavía.</p>
     </div>
     
     <!-- Si hay resultados, se muestra la tabla -->
     <table th:unless="${puntuaciones.isEmpty()}">
       <thead>
         <tr>
-          <th>Usuario</th>
-          <th>Resultado</th>
-          <th>Fecha</th>
+          <th th:text="#{geografia.tabla.usuario}">Usuario</th>
+          <th th:text="#{geografia.tabla.resultado}">Resultado</th>
+          <th th:text="#{geografia.tabla.fecha}">Fecha</th>
         </tr>
       </thead>
       <tbody>
         <tr th:each="puntuacion : ${puntuaciones}">
           <td th:text="${puntuacion.username}">Usuario</td>
           <td>
-            <span th:text="${puntuacion.victoria} ? 'Correcto' : 'Incorrecto'" 
+            <span th:text="${puntuacion.victoria} ? #{geografia.resultado.correcto} : #{geografia.resultado.incorrecto}" 
                   th:class="${puntuacion.victoria} ? 'victoria' : 'derrota'">
               Resultado
             </span>
@@ -128,10 +128,10 @@
     
     <!-- Acciones -->
     <div class="actions">
-      <a th:href="@{/juegos/geografia}" class="btn">Jugar de nuevo</a>
-      <a th:href="@{/home}" class="btn">Volver al inicio</a>
+      <a th:href="@{/juegos/geografia}" class="btn" th:text="#{geografia.botones.jugar}">Jugar de nuevo</a>
+      <a th:href="@{/home}" class="btn" th:text="#{geografia.botones.inicio}">Volver al inicio</a>
       <form th:action="@{/juegos/puntuaciones/eliminar-geografia}" method="post" style="display: inline;">
-        <button type="submit" class="btn btn-danger">Eliminar todos los resultados</button>
+        <button type="submit" class="btn btn-danger" th:text="#{geografia.botones.eliminar}">Eliminar todos los resultados</button>
       </form>
     </div>
   </div>

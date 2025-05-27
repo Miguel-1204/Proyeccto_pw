@@ -2,7 +2,7 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>Juego de Geografía</title>
+  <title th:text="#{titulo.pagina}">Juego de Geografía</title>
   <style>
     body {
       font-family: var(--tipo-principal, Arial, sans-serif);
@@ -108,34 +108,28 @@
 </head>
 <body>
   <div class="container">
-    <h1>Juego de Geografía</h1>
+    <h1 th:text="#{titulo.juego}">Juego de Geografía</h1>
     
-    <!-- Pregunta fija -->
-    <p class="pregunta">¿Qué región de Colombia es la que se muestra en la imagen?</p>
+    <p class="pregunta" th:text="#{pregunta.region}">¿Qué región de Colombia es la que se muestra en la imagen?</p>
     
-    <!-- Contenedor de la imagen -->
     <div class="imagen-container">
       <img id="departamentoImg" src="" alt="Departamento">
     </div>
     
-    <!-- Opciones de respuesta -->
     <div class="opciones">
-      <button onclick="enviarRespuesta('Andina')">Andina</button>
-      <button onclick="enviarRespuesta('Caribe')">Caribe</button>
-      <button onclick="enviarRespuesta('Pacífico')">Pacífico</button>
-      <button onclick="enviarRespuesta('Orinoquía')">Orinoquía</button>
-      <button onclick="enviarRespuesta('Amazonía')">Amazonía</button>
+      <button onclick="enviarRespuesta('Andina')" th:text="#{opcion.andina}">Andina</button>
+      <button onclick="enviarRespuesta('Caribe')" th:text="#{opcion.caribe}">Caribe</button>
+      <button onclick="enviarRespuesta('Pacífico')" th:text="#{opcion.pacifico}">Pacífico</button>
+      <button onclick="enviarRespuesta('Orinoquía')" th:text="#{opcion.orinoquia}">Orinoquía</button>
+      <button onclick="enviarRespuesta('Amazonía')" th:text="#{opcion.amazonia}">Amazonía</button>
     </div>
     
-    <!-- Mensaje de retroalimentación -->
     <p id="mensaje"></p>
     
-    <!-- Botones de acción: Siguiente y Volver al Menú Principal -->
     <div class="acciones">
-      <button id="btnNext" class="btn-next" style="display:none;" onclick="siguientePregunta()">Siguiente</button>
-      <button id="btnHome" class="btn-home" style="display:inline-block;" onclick="window.location.href='/home'">Volver al Menú Principal</button>
+      <button id="btnNext" class="btn-next" style="display:none;" onclick="siguientePregunta()" th:text="#{boton.siguiente}">Siguiente</button>
+      <button id="btnHome" class="btn-home" style="display:inline-block;" onclick="window.location.href='/home'" th:text="#{boton.volver.menu}">Volver al Menú Principal</button>
     </div>
-    
     <script>
       console.log("Script de geografía cargado");
       

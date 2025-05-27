@@ -2,7 +2,8 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>Puntuaciones de Usuario</title>
+  <title th:text="#{titulo.puntuaciones.usuario}">Puntuaciones de Usuario</title>
+  
   <style>
     body {
       font-family: var(--tipo-principal);
@@ -79,17 +80,21 @@
       background: #c0392b;
     }
   </style>
+  
 </head>
 <body>
   <div class="container">
-    <h1>Puntuaciones de <span th:text="${username}"></span></h1>
+    <h1>
+      <span th:text="#{encabezado.puntuaciones}">Puntuaciones de</span> 
+      <span th:text="${username}"></span>
+    </h1>
     
     <table th:if="${!puntuaciones.isEmpty()}">
       <thead>
         <tr>
-          <th>Nivel</th>
-          <th>Puntos</th>
-          <th>Fecha</th>
+          <th th:text="#{tabla.nivel}">Nivel</th>
+          <th th:text="#{tabla.puntos}">Puntos</th>
+          <th th:text="#{tabla.fecha}">Fecha</th>
         </tr>
       </thead>
       <tbody>
@@ -103,13 +108,14 @@
     
     <!-- Mensaje si no hay resultados -->
     <div th:if="${puntuaciones.isEmpty()}">
-      <p style="text-align: center; color: #7f8c8d; padding: 20px; font-style: italic;">
-        No hay resultados registrados todavía.
+      <p style="text-align: center; color: #7f8c8d; padding: 20px; font-style: italic;"
+         th:text="#{mensaje.vacio}">
+         No hay resultados registrados todavía.
       </p>
     </div>
     
     <div class="actions">
-      <a th:href="@{/home}" class="btn">Volver al inicio</a>
+      <a th:href="@{/home}" class="btn" th:text="#{boton.volver}">Volver al inicio</a>
     </div>
   </div>
 </body>

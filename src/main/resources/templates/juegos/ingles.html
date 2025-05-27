@@ -2,8 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>Juego de Inglés</title>
-  <style>
+  <title th:text="#{titulo.pagina}">Juego de Inglés</title>
+<style>
     /* Estilos Globales */
     body {
       font-family: var(--tipo-principal, Arial, sans-serif);
@@ -132,48 +132,45 @@
 </head>
 <body>
   <div class="container">
-      <h3>Bienvenido, <span th:text="${username}"></span></h3>
-      
-      <div class="nivel-selector">    
-          <form th:action="@{/juegos/ingles}" method="get">
-              <label for="nivel">Selecciona nivel:</label>
-              <select id="nivel" name="nivel">
-                  <option th:each="nivel : ${niveles}" 
-                          th:value="${nivel}" 
-                          th:text="${nivel}"
-                          th:selected="${nivel == pregunta.dificultad}">
-                  </option>
-              </select>
-              <button type="submit">Cambiar</button>
-          </form>
-          <p class="nivel-info">
-              Nivel actual: <span th:text="${pregunta.dificultad}"></span>
-          </p>
-      </div>
+    <h3 th:text="#{mensaje.bienvenida}">Bienvenido, <span th:text="${username}"></span></h3>
+    
+    <div class="nivel-selector">    
+        <form th:action="@{/juegos/ingles}" method="get">
+            <label for="nivel" th:text="#{mensaje.seleccionar.nivel}">Selecciona nivel:</label>
+            <select id="nivel" name="nivel">
+                <option th:each="nivel : ${niveles}" 
+                        th:value="${nivel}" 
+                        th:text="${nivel}"
+                        th:selected="${nivel == pregunta.dificultad}">
+                </option>
+            </select>
+            <button type="submit" th:text="#{boton.cambiar}">Cambiar</button>
+        </form>
+        <p class="nivel-info" th:text="#{mensaje.nivel.actual} + ' ' + ${pregunta.dificultad}"></p>
+    </div>
 
-      <h1>Completa la oración:</h1>
-      <p th:text="${pregunta.oracion}" style="text-align: center; font-size: 18px;"></p>
-      
-      <form th:action="@{/juegos/ingles/verificar}" method="post">
-          <input type="hidden" name="oracion" th:value="${pregunta.oracion}">
-          <input type="hidden" name="nivel" th:value="${pregunta.dificultad}">
-          
-          <div class="option-buttons">
-              <span th:each="opcion : ${pregunta.opciones}">
-                  <button type="submit" name="respuesta" th:value="${opcion}" th:text="${opcion}"></button>
-              </span>
-          </div>
-      </form>
-      
-      <p class="resultado" th:if="${resultado}" th:text="${resultado}" 
-         th:style="${resultado == '¡Correcto!' ? 'color:green' : 'color:red'}"></p>
-      
-      <!-- Botón para volver al Home, con estilo uniforme -->
-      <div style="text-align: center; margin-top: 20px;">
-          <button type="button" class="btn-home">
-            <a th:href="@{/home}" style="text-decoration: none; color:#ffffff; display:block;">Volver al Home</a>
-          </button>
-      </div>
+    <h1 th:text="#{mensaje.completar.oracion}">Completa la oración:</h1>
+    <p th:text="${pregunta.oracion}" style="text-align: center; font-size: 18px;"></p>
+    
+    <form th:action="@{/juegos/ingles/verificar}" method="post">
+        <input type="hidden" name="oracion" th:value="${pregunta.oracion}">
+        <input type="hidden" name="nivel" th:value="${pregunta.dificultad}">
+        
+        <div class="option-buttons">
+            <span th:each="opcion : ${pregunta.opciones}">
+                <button type="submit" name="respuesta" th:value="${opcion}" th:text="${opcion}"></button>
+            </span>
+        </div>
+    </form>
+    
+    <p class="resultado" th:if="${resultado}" th:text="${resultado}" 
+       th:style="${resultado == '¡Correcto!' ? 'color:green' : 'color:red'}"></p>
+    
+    <div style="text-align: center; margin-top: 20px;">
+        <button type="button" class="btn-home">
+          <a th:href="@{/home}" style="text-decoration: none; color:#ffffff; display:block;" th:text="#{boton.volver.home}">Volver al Home</a>
+        </button>
+    </div>
   </div>
 </body>
 </html>
