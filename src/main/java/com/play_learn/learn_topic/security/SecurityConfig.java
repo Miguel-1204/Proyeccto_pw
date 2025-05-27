@@ -19,7 +19,9 @@ public class SecurityConfig {
         http
             .authorizeHttpRequests(auth -> auth
                 // Permitir recursos públicos y páginas de login/registro
-                .requestMatchers("/css/**", "/js/**", "/login", "/registro").permitAll()
+            		.requestMatchers("/css/**", "/js/**", "/login", "/registro", 
+                            "/swagger-ui.html", "/swagger-ui/**", 
+                            "/v3/api-docs/**", "/webjars/**").permitAll()
                 
                 .requestMatchers("/administracion/accion-admin").hasAuthority("ROLE_ADMINISTRADOR")
                 

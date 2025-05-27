@@ -34,6 +34,10 @@ import com.play_learn.learn_topic.repository.PuntuacionGeografiaRepository;
 import com.play_learn.learn_topic.repository.PuntuacionGeometriaRepository;
 import com.play_learn.learn_topic.service.JuegoInglesService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+
 @Controller
 @RequestMapping("/juegos")
 public class JuegosController {
@@ -150,6 +154,12 @@ public class JuegosController {
 
     	
     @PostMapping("/matematicas/guardar-puntuacion")
+    @Operation(summary = "Guardar puntuación en el juego de matemáticas", 
+    description = "Registra la puntuación obtenida por el usuario en la ronda actual")
+	@ApiResponse(responseCode = "200", description = "Puntuación guardada correctamente")
+	@ApiResponse(responseCode = "400", description = "Solicitud inválida, falta la información requerida", content = @Content)
+	@ApiResponse(responseCode = "401", description = "Usuario no autenticado", content = @Content)
+	@ApiResponse(responseCode = "500", description = "Error interno al guardar la puntuación", content = @Content)
     public ResponseEntity<?> guardarPuntuacion(@RequestBody Map<String, Integer> datos) {
         int ronda = datos.get("ronda");
         int puntuacion = datos.get("puntuacion");
@@ -238,6 +248,12 @@ public class JuegosController {
 
 
     @PostMapping("/matematicas/guardar-puntuacion-geometria")
+    @Operation(summary = "Guardar puntuación en el juego de geometría", 
+    description = "Registra el tiempo y el resultado (victoria/derrota) del usuario en el juego de geometría")
+	@ApiResponse(responseCode = "200", description = "Puntuación guardada correctamente")
+	@ApiResponse(responseCode = "400", description = "Solicitud inválida, falta la información requerida", content = @Content)
+	@ApiResponse(responseCode = "401", description = "Usuario no autenticado", content = @Content)
+	@ApiResponse(responseCode = "500", description = "Error interno al guardar la puntuación", content = @Content)
     public ResponseEntity<?> guardarPuntuacionGeometria(@RequestBody Map<String, Object> datos) {
         try {
             int tiempo = Integer.parseInt(datos.get("tiempo").toString());
@@ -318,6 +334,12 @@ public class JuegosController {
 
     // Endpoint para guardar la puntuación del juego de geografía
     @PostMapping("/guardar-puntuacion-geografia")
+    @Operation(summary = "Guardar puntuación en el juego de geografía", 
+               description = "Registra si el usuario ganó o perdió en el juego de geografía")
+    @ApiResponse(responseCode = "200", description = "Puntuación guardada correctamente")
+    @ApiResponse(responseCode = "400", description = "Solicitud inválida, falta el campo 'victoria'", content = @Content)
+    @ApiResponse(responseCode = "401", description = "Usuario no autenticado", content = @Content)
+    @ApiResponse(responseCode = "500", description = "Error interno al guardar la puntuación", content = @Content)    
     public ResponseEntity<?> guardarPuntuacionGeografia(@RequestBody Map<String, Object> datos) {
         try {
             // Verifica que el campo "victoria" existe
@@ -357,6 +379,12 @@ public class JuegosController {
     
     // (Opcional) Endpoint para listar los resultados del juego de geografía por usuario
     @GetMapping("/puntuaciones/geografia")
+    @Operation(summary = "Guardar puntuación en el juego de geografía", 
+    description = "Registra si el usuario ganó o perdió en el juego de geografía")
+	@ApiResponse(responseCode = "200", description = "Puntuación guardada correctamente")
+	@ApiResponse(responseCode = "400", description = "Solicitud inválida, falta el campo 'victoria'", content = @Content)
+	@ApiResponse(responseCode = "401", description = "Usuario no autenticado", content = @Content)
+	@ApiResponse(responseCode = "500", description = "Error interno al guardar la puntuación", content = @Content)
     public String mostrarPuntuaciones(Model model) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         List<PuntuacionGeografia> puntuaciones = puntuacionGeografiaRepository.findByUsernameOrderByFechaDesc(username);
